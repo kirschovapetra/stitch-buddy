@@ -1,48 +1,52 @@
-name: Create Release from Expo Build
+name: Expo Build and GitHub Release
 
 on:
-  workflow_dispatch:
   push:
     branches:
       - master
 
 jobs:
-  release:
+  build:
     runs-on: ubuntu-latest
-    env:
-      EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      REPO: ${{ github.repository }}
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Install Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-
       - name: Install dependencies
-        run: npm install node-fetch@2
-
-      - name: Fetch latest Expo build info
-        id: fetch_build
         run: |
-          RESPONSE=$(curl -s -H "Authorization: Bearer $EXPO_TOKEN" "https://api.expo.dev/v2/projects/$(basename $REPO)/builds?platform=android&limit=1")
-          BUILD_URL=$(echo $RESPONSE | jq -r '.data[0].artifacts.buildUrl')
-          echo "APK URL: $BUILD_URL"
-          echo "BUILD_URL=$BUILD_URL" >> $GITHUB_ENV
+          npm install
+          npm install -g eas-cli
 
-      - name: Download APK
+      - name: Authenticate with Expo
+        run: eas login --token ${{ secrets.EXPO_TOKEN }}
+
+      - name: Start Expo build (Android)
+        run: eas build --platform android --profile release-apk
+
+      - name: Wait for Expo build to finish
         run: |
-          curl -L "$BUILD_URL" -o release.apk
+          BUILD_ID=$(eas build:list --platform android --limit 1 --json | jq -r '.[0].id')
+          echo "Waiting for Expo build to finish..."
+          while true; do
+            BUILD_STATUS=$(eas build:status --id $BUILD_ID --json | jq -r '.status')
+            if [[ "$BUILD_STATUS" == "finished" ]]; then
+              echo "Build finished."
+              break
+            fi
+            sleep 10
+          done
 
-      - name: Create GitHub Release
-        id: create_release
+      - name: Get build artifacts
+        run: |
+          APK_URL=$(eas build:status --id $BUILD_ID --json | jq -r '.artifacts.buildUrl')
+          echo "APK URL: $APK_URL"
+          curl -L "$APK_URL" -o release.apk
+
+      - name: Create GitHub Release and upload APK
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ github.run_number }}
-          name: Release ${{ github.run_number }}
+          name: Release v${{ github.run_number }}
           body: "Automated release from Expo build"
           files: release.apk
