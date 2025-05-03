@@ -32,38 +32,22 @@ jobs:
         run: |
           eas build --platform android --profile release-apk --non-interactive --json > build-info.json
 
-      - name: ⏳ Wait for build to finish
-        id: wait-build
-        run: |
-          BUILD_ID=$(jq -r '.id' build-info.json)
-          echo "Build ID: $BUILD_ID"
-
-          while true; do
-            STATUS=$(eas build:status --non-interactive --json --id $BUILD_ID | jq -r '.status')
-            echo "Current status: $STATUS"
-            if [[ "$STATUS" == "finished" ]]; then
-              echo "Build completed."
-              break
-            elif [[ "$STATUS" == "errored" ]]; then
-              echo "❌ Build failed."
-              exit 1
-            fi
-            sleep 15
-          done
-
-      - name: 📥 Download APK
-        id: download-apk
-        run: |
-          BUILD_URL=$(eas build:status --non-interactive --json --id $(jq -r '.id' build-info.json) | jq -r '.artifacts.buildUrl')
-          echo "APK URL: $BUILD_URL"
-          curl -L "$BUILD_URL" -o app-release.apk
-
-      - name: 🏁 Create GitHub Release and upload APK
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: v${{ github.run_number }}
-          name: "Release v${{ github.run_number }}"
-          body: "Automated release from EAS build."
-          files: app-release.apk
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ github.run_number }}
+          release_name: Release v${{ github.run_number }}
+
+      - name: Upload Release Asset
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./app-release.apk
+          asset_name: app-release.apk
+          asset_content_type: application/vnd.android.package-archive
