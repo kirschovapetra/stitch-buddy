@@ -1,0 +1,48 @@
+name: Create Release from Expo Build
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      REPO: ${{ github.repository }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install node-fetch@2
+
+      - name: Fetch latest Expo build info
+        id: fetch_build
+        run: |
+          RESPONSE=$(curl -s -H "Authorization: Bearer $EXPO_TOKEN" "https://api.expo.dev/v2/projects/$(basename $REPO)/builds?platform=android&limit=1")
+          BUILD_URL=$(echo $RESPONSE | jq -r '.data[0].artifacts.buildUrl')
+          echo "APK URL: $BUILD_URL"
+          echo "BUILD_URL=$BUILD_URL" >> $GITHUB_ENV
+
+      - name: Download APK
+        run: |
+          curl -L "$BUILD_URL" -o release.apk
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ github.run_number }}
+          name: Release ${{ github.run_number }}
+          body: "Automated release from Expo build"
+          files: release.apk
