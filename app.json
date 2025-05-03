@@ -16,7 +16,8 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.kirschovapetra.StitchBuddy"
     },
     "web": {
       "bundler": "metro",
@@ -33,10 +34,18 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
-      ]
+      ],
+      "expo-sqlite"
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "owner": "kirschovapetra",
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "cd537957-2e51-4fe2-8b01-c2d616e3917e"
+      }
     }
   }
 }
