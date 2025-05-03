@@ -1,52 +1,69 @@
-name: Expo Build and GitHub Release
+name: Build & Release Expo Android APK
 
 on:
   push:
     branches:
       - master
-
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: 🏗 Setup repo
         uses: actions/checkout@v3
 
-      - name: Install dependencies
+      - name: 🏗 Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+          cache: yarn
+
+      - name: 🏗 Setup EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: 📦 Install dependencies
+        run: yarn install
+
+      - name: 🚀 Start Expo build
+        id: eas-build
         run: |
-          npm install
-          npm install -g eas-cli
+          eas build --platform android --profile release-apk --non-interactive --json > build-info.json
 
-      - name: Authenticate with Expo
-        run: eas login --token ${{ secrets.EXPO_TOKEN }}
-
-      - name: Start Expo build (Android)
-        run: eas build --platform android --profile release-apk
-
-      - name: Wait for Expo build to finish
+      - name: ⏳ Wait for build to finish
+        id: wait-build
         run: |
-          BUILD_ID=$(eas build:list --platform android --limit 1 --json | jq -r '.[0].id')
-          echo "Waiting for Expo build to finish..."
+          BUILD_ID=$(jq -r '.id' build-info.json)
+          echo "Build ID: $BUILD_ID"
+
           while true; do
-            BUILD_STATUS=$(eas build:status --id $BUILD_ID --json | jq -r '.status')
-            if [[ "$BUILD_STATUS" == "finished" ]]; then
-              echo "Build finished."
+            STATUS=$(eas build:status --non-interactive --json --id $BUILD_ID | jq -r '.status')
+            echo "Current status: $STATUS"
+            if [[ "$STATUS" == "finished" ]]; then
+              echo "Build completed."
               break
+            elif [[ "$STATUS" == "errored" ]]; then
+              echo "❌ Build failed."
+              exit 1
             fi
-            sleep 10
+            sleep 15
           done
 
-      - name: Get build artifacts
+      - name: 📥 Download APK
+        id: download-apk
         run: |
-          APK_URL=$(eas build:status --id $BUILD_ID --json | jq -r '.artifacts.buildUrl')
-          echo "APK URL: $APK_URL"
-          curl -L "$APK_URL" -o release.apk
+          BUILD_URL=$(eas build:status --non-interactive --json --id $(jq -r '.id' build-info.json) | jq -r '.artifacts.buildUrl')
+          echo "APK URL: $BUILD_URL"
+          curl -L "$BUILD_URL" -o app-release.apk
 
-      - name: Create GitHub Release and upload APK
+      - name: 🏁 Create GitHub Release and upload APK
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ github.run_number }}
-          name: Release v${{ github.run_number }}
-          body: "Automated release from Expo build"
-          files: release.apk
+          name: "Release v${{ github.run_number }}"
+          body: "Automated release from EAS build."
+          files: app-release.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
