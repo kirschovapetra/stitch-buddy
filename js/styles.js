@@ -1,13 +1,8 @@
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
-  stackTitle: {
-    fontSize: 28,
-    color: "#9f68a8",
-    fontFamily: "Nunito",
-  },
   container: {
-    flex: 1,
+    flexGrow: 1,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#f6edfa",
@@ -20,7 +15,7 @@ const styles = StyleSheet.create({
   titleText: {
     fontSize: 28,
     color: "#9f68a8",
-    marginBottom: 15,
+    marginBottom: 5,
     fontFamily: "Nunito",
   },
   buttonContainer: {
@@ -65,7 +60,6 @@ const styles = StyleSheet.create({
     fontFamily: "Nunito",
   },
   resetButton: {
-    marginTop: 12,
     paddingHorizontal: 10,
     paddingVertical: 8,
     borderRadius: 8,
@@ -84,18 +78,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  heart: {
-    marginHorizontal: 2,
-    color: "#d88dd4",
-  },
   input: {
-    width: "275",
     height: 40,
     borderColor: "#ccc",
     borderWidth: 0,
     borderRadius: 7,
     paddingHorizontal: 10,
-    marginBottom: 20,
+    marginBottom: 10,
     fontSize: 16,
     color: "#9f68a8",
     fontFamily: "Nunito",
@@ -110,16 +99,39 @@ const styles = StyleSheet.create({
   },
   progressBarContainer: {
     height: 10,
-    width: '100%',
-    backgroundColor: '#e0d4e2',
+    backgroundColor: "#e0e0e0",
     borderRadius: 5,
-    overflow: 'hidden',
-    marginTop: 10,
+    overflow: "hidden",
+    marginVertical: 8,
   },
   progressBarFill: {
-    height: '100%',
-    backgroundColor: '#9f68a8',
+    height: "100%",
     borderRadius: 5,
+  },
+  titleRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    flexShrink: 1,
+    width: "80%",
+  },
+  stackTitle: {
+    fontSize: 28,
+    color: "#9f68a8",
+    fontFamily: "Nunito",
+    flexShrink: 1,
+    flexGrow: 1,
+    textAlign: "center",
+    marginHorizontal: 8,
+  },
+  icon: {
+    fontSize: 18,
+    flexShrink: 0,
+    color: "#d88dd4",
+  },
+  fullWidthBlock: {
+    width: "80%", // or any percentage you prefer
+    maxWidth: 400, // optional: cap it for tablets
   },
 });
 

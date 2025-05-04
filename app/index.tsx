@@ -1,10 +1,10 @@
-import { Entypo, Ionicons, MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
-import React, { useEffect, useMemo, useState } from 'react';
 import { useFonts } from 'expo-font';
+import { Entypo, MaterialCommunityIcons } from '@expo/vector-icons';
 import * as SplashScreen from 'expo-splash-screen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from "../js/styles";
-import { View, Text, TextInput, TouchableOpacity, Dimensions } from 'react-native';
+import { Dimensions, TextInput, TouchableOpacity, View, Text, ScrollView } from 'react-native';
+import { useState, useEffect, useMemo } from 'react';
 
 // Prevent splash screen from auto-hiding until fonts are loaded
 SplashScreen.preventAutoHideAsync();
@@ -28,24 +28,25 @@ const loadData = async (itemKey: string): Promise<number> => {
 };
 
 export const CountBlock = ({ title, itemKey }: any) => {
+  const screenWidth = Dimensions.get('window').width;
   const [count, setCount] = useState(0);
-  const [totalCount, setTotalCount] = useState('');
+  const [totalCount, setTotalCount] = useState(0);
   const [loading, setLoading] = useState(true);  // Add loading state
+  const [progress, setProgress] = useState(0);  // Add loading state
 
-  const increment = () => { if (count < (parseInt(totalCount) || 0)) setCount(count + 1); };
+  const increment = () => { if (count < (totalCount || 0)) setCount(count + 1); };
   const decrement = () => { if (count > 0) setCount(count - 1); };
   const reset = () => {
-    setTotalCount('');
+    setTotalCount(0);
     setCount(0);
   };
-
   useEffect(() => {
     const loadDataAsync = async () => {
       const loadedTotalCount = await loadData(`${itemKey}_total`);
       const loadedCount = await loadData(itemKey);
 
       // Update both count and totalCount in sequence
-      setTotalCount(loadedTotalCount.toString());
+      setTotalCount(loadedTotalCount);
       setCount(loadedCount);
 
       setLoading(false);  // Set loading to false once data is loaded
@@ -53,11 +54,13 @@ export const CountBlock = ({ title, itemKey }: any) => {
 
     loadDataAsync();
   }, [itemKey]); // Depend on itemKey so it reloads if the itemKey changes
-
   useEffect(() => {
     if (!loading) {  // Only store data after loading is complete
       storeData(itemKey, count);
       storeData(`${itemKey}_total`, totalCount);
+
+      const safeTotal = totalCount === 0 ? 1 : totalCount;
+      setProgress(count / safeTotal);
     }
   }, [count, totalCount, loading, itemKey]);
 
@@ -74,16 +77,17 @@ export const CountBlock = ({ title, itemKey }: any) => {
         How many in total?
       </Text>
       <TextInput
-        style={[styles.input, { textAlign: 'center' }]}
+        style={[styles.input, { width: screenWidth * 0.8 }]}
         keyboardType="numeric"
-        value={totalCount}
+        value={totalCount.toString()}
         onChangeText={(text) => {
-          setTotalCount(text);
+          const parsed = parseInt(text);
+          setTotalCount(isNaN(parsed) ? 0 : parsed);
         }}
         placeholder="0"
       />
 
-      <View style={styles.buttonContainer}>
+      <View style={[styles.buttonContainer, { width: screenWidth * 0.8 }]}>
         {/* Minus Button */}
         <TouchableOpacity
           onPress={decrement}
@@ -101,27 +105,26 @@ export const CountBlock = ({ title, itemKey }: any) => {
         {/* Plus Button */}
         <TouchableOpacity
           onPress={increment}
-          style={[styles.button, styles.plusButton, count === totalCount && styles.disabledButton]}
-          disabled={count === totalCount}
+          style={[styles.button, styles.plusButton, (count === totalCount || totalCount === 0) && styles.disabledButton]}
+          disabled={count === totalCount || totalCount === 0}
         >
           <Entypo name="plus" size={40} color="#fff" />
         </TouchableOpacity>
       </View>
 
-      {/* Progress Bar */}
-      <View style={styles.progressBarContainer}>
+        {/* Progress Bar */}
+      <View style={[styles.progressBarContainer, { width: screenWidth * 0.8 }]}>
         <View
           style={[
             styles.progressBarFill,
             {
-              width: `${count > 0 ? Math.min((count / parseInt(totalCount)) * 100, 100) : 0}%`,
-              backgroundColor: (count === parseInt(totalCount) && count > 0) ? '#68c46c' : '#9f68a8',
+              width: `${count > 0 ? Math.min((count / totalCount) * 100, 100) : 0}%`,
+              backgroundColor: (count === totalCount && count > 0) ? '#68c46c' : '#9f68a8',
             },
 
           ]}
         />
       </View>
-
       {/* Reset Button */}
       <TouchableOpacity onPress={reset} style={styles.resetButton}>
         <Text style={styles.resetText}>RESET</Text>
@@ -131,16 +134,11 @@ export const CountBlock = ({ title, itemKey }: any) => {
 };
 
 export default function App() {
-  const screenWidth = Dimensions.get('window').width;
-  const heartSize = 30;
-  const heartCount = useMemo(() => Math.floor(screenWidth / heartSize), [screenWidth]);
 
   const [loaded, error] = useFonts({
     'Nunito': require('../assets/fonts/Nunito.ttf'),
-    ...Entypo.font,
-    ...Ionicons.font,
     ...MaterialCommunityIcons.font,
-    ...AntDesign.font
+    ...Entypo.font,
   });
 
   useEffect(() => {
@@ -154,10 +152,10 @@ export default function App() {
   }
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <CountBlock title="Row Counter" itemKey="row" />
       <View style={styles.separator} />
       <CountBlock title="Stitch Counter" itemKey="stitch" />
-    </View>
+    </ScrollView>
   );
 }
