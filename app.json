@@ -35,7 +35,12 @@
           "backgroundColor": "#ffffff"
         }
       ],
-      "expo-sqlite"
+      [
+        "expo-font",
+        {
+          "fonts": ["assets/fonts/Nunito.ttf"]
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

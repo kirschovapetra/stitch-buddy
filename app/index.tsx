@@ -1,10 +1,11 @@
 import { Entypo } from '@expo/vector-icons';
-import { useFonts } from 'expo-font';
-import * as SplashScreen from 'expo-splash-screen';
+// import { getLoadedFonts, useFonts } from 'expo-font';
+// import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useMemo, useState } from 'react';
 import { Dimensions, Pressable, Text, View } from 'react-native';
-import styles from "../js/styles";
+import { StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import styles from "../js/styles"
 
 const storeData = async (itemKey: string, value: any) => {
   try {
@@ -86,24 +87,20 @@ export default function App() {
   const heartSize = 30; // total width including margin
   const heartCount = useMemo(() => Math.floor(screenWidth / heartSize), [screenWidth]);
 
-  const [loaded, error] = useFonts({
-    'AmaticSC': require('../assets/fonts/AmaticSC-Regular.ttf'),
-    'AmaticSC-Bold': require('../assets/fonts/AmaticSC-Bold.ttf'),
-    'Nunito': require('../assets/fonts/Nunito-VariableFont_wght.ttf'),
-    'Nunito-Bold': require('../assets/fonts/Nunito-VariableFont_wght.ttf'),
-    'Nunito-Italic': require('../assets/fonts/Nunito-Italic-VariableFont_wght.ttf'),
-  });
+  // const [loaded, error] = useFonts({
+  //   'Nunito': require('../assets/fonts/Nunito.ttf')
+  // });
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    if (loaded || error) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded, error]);
+  //   if (loaded || error) {
+  //     SplashScreen.hideAsync();
+  //   }
+  // }, [loaded, error]);
 
-  if (!loaded && !error) {
-    return <Text style={styles.titleText}>Shaving llamas</Text>;
-  }
+  // if (!loaded && !error) {
+  //   return <Text style={styles.titleText}>Shaving llamas</Text>;
+  // }
 
   return (
     <View style={styles.container}>

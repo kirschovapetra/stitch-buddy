@@ -5,7 +5,7 @@ const styles = StyleSheet.create({
     fontSize: 30, 
     fontWeight: 'bold',
     color: '#9f68a8',
-    fontFamily: 'Nunito-Bold'
+    fontFamily: "Nunito"
   },
   container: {
     flex: 1,
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#9f68a8', // Deep lilac
     marginBottom: 15,
-    fontFamily: 'Nunito'
+    fontFamily: "Nunito"
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: 'bold',
     color: '#333',
-    fontFamily: 'Nunito-Bold'
+    fontFamily: "Nunito"
   },
   resetButton: {
     marginTop: 12,
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: '600',
     fontSize: 16,
-    fontFamily: 'Nunito-Bold'
+    fontFamily: "Nunito"
   },
   separator: {
     flexDirection: 'row',
