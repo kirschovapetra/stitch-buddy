@@ -1,12 +1,15 @@
 import React from 'react';
-import {View, Text} from "react-native";
+import {View, Text, TouchableOpacity} from "react-native";
 import {styles} from "@/assets/styles";
-
-type ItemProps = {title: string};
-export default function ProjectListItem ({title}: ItemProps) {
+import { useRouter } from 'expo-router';
+import {ItemProps} from "@/assets/types";
+export default function ProjectListItem ({project}: ItemProps) {
+    const router = useRouter();
     return (
-        <View style={styles.item}>
-            <Text style={styles.title}>{title}</Text>
-        </View>
+        <TouchableOpacity onPress={()=>router.navigate("/[project]")}>
+            <View style={styles.item}>
+                <Text style={styles.title}>{project}</Text>
+            </View>
+        </TouchableOpacity>
     );
 }
