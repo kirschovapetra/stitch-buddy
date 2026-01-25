@@ -1,6 +1,7 @@
 import { Stack } from "expo-router";
-import {configureFonts, PaperProvider, useTheme, Text} from "react-native-paper";
+import {configureFonts, PaperProvider, Text} from "react-native-paper";
 import {useFonts} from "expo-font";
+import {theme} from "@/assets/styles";
 export default function RootLayout() {
 
     const [loaded] = useFonts({
@@ -27,8 +28,6 @@ export default function RootLayout() {
             },
         },
     });
-
-    const theme = useTheme();
 
     if (!loaded) {
         return (

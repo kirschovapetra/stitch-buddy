@@ -4,6 +4,7 @@ import CountBlock from "@/components/ui/CountBlock";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {Project} from "@/assets/types";
 import { Text } from 'react-native-paper';
+import {styles} from "@/assets/styles";
 const storeDataAsync = async (title: string, value: any) => {
     try {
         const jsonValue = JSON.stringify(value);
@@ -48,10 +49,10 @@ export default function ProjectDetail ({project}: any) {
 
 
     return (
-        <Animated.ScrollView>
-            <Text variant="titleLarge">{project}</Text>
+        <Animated.ScrollView style={styles.mainContainer}>
+            <Text variant="titleLarge" style={styles.projectTitle}>Project: {project}</Text>
             <CountBlock title="Row Counter" count={row} countTotal={rowsTotal} setCount={setRow} setCountTotal={setRowsTotal}/>
-            <CountBlock title="Stitch Counter" count={stitch} countTotal={stitchesTotal} Count={setStitch} setCountTotal={setStitchesTotal}/>
+            <CountBlock title="Stitch Counter" count={stitch} countTotal={stitchesTotal} setCount={setStitch} setCountTotal={setStitchesTotal}/>
         </Animated.ScrollView>
     );
 }

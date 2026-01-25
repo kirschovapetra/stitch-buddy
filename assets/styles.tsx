@@ -1,11 +1,55 @@
 import {StyleSheet} from 'react-native';
 import {DefaultTheme} from "react-native-paper";
 export const styles = StyleSheet.create({
-    item: {
-        padding: 20,
+    mainContainer:{
+        marginHorizontal:16
+    },
+    projectsListItemContainer: {
+        paddingHorizontal:20,
+        paddingVertical:5,
         marginVertical: 8,
-        marginHorizontal: 16,
-    }
+        flex:1,
+        flexDirection:"row",
+        justifyContent:"space-between",
+        alignContent:"center",
+        borderRadius:10
+    },
+    countBlockButtonsContainer: {
+        flex:1,
+        flexDirection:"row",
+        justifyContent:"center",
+        alignContent:"center"
+    },
+    countBlockResetButton: {
+      marginBottom:5
+    },
+    projectListItemTextContainer: {
+        justifyContent:"center",
+        textAlign: "center",
+    },
+    centerTextContainer: {
+        justifyContent:"center",
+        textAlign: "center",
+        padding:5
+    },
+    projectTitle: {
+        justifyContent:"center",
+        textAlign: "center",
+        padding:5,
+        marginVertical:8
+    },
+    projectsListButtonsContainer: {
+        flex:1,
+        justifyContent:"flex-end",
+        flexDirection:"row"
+    },
+    addProjectButtonsContainer: {
+        flex:1,
+        justifyContent:"center",
+        alignItems: "center",
+        flexDirection:"row",
+        textAlign: "center"
+    },
 });
 
 export const theme = {
