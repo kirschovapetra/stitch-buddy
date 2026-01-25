@@ -37,6 +37,12 @@ export const styles = StyleSheet.create({
         textAlign: "center",
         padding:5
     },
+    centerTextInput: {
+        justifyContent:"center",
+        textAlign: "center",
+        width: 60,
+        padding:0
+    },
     projectTitle: {
         justifyContent:"center",
         textAlign: "center",

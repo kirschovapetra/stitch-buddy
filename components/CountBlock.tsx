@@ -12,6 +12,7 @@ export default function CountBlock({title, count, countTotal, setCount, setCount
     const reset = () => {
         setCountTotal("0");
         setCount("0");
+        alert("Reset successful")
     };
 
     return (
@@ -29,11 +30,18 @@ export default function CountBlock({title, count, countTotal, setCount, setCount
                 onChangeText={x=>setCountTotal(x)}
             />
             <View style={styles.countBlockButtonsContainer}>
-                <IconButton icon="minus" mode="contained" onPress={decrement}/>
+                <IconButton icon="minus" mode="contained" onPress={decrement} disabled={Number(count) <= 0}/>
                 <View style={styles.centerTextContainer}>
-                    <Text variant="bodyLarge">{count}</Text>
+                    <TextInput
+                        keyboardType="numeric"
+                        value={count}
+                        dense
+                        onChangeText={x=> setCount(x)}
+                        style={styles.centerTextInput}
+                        error={Number(count) > Number(countTotal) || Number(count) < 0}
+                    />
                 </View>
-                <IconButton icon="plus" mode="contained" onPress={increment}/>
+                <IconButton icon="plus" mode="contained" onPress={increment} disabled={Number(count) >= Number(countTotal)}/>
             </View>
             <Button style={styles.countBlockResetButton} mode="contained" onPress={reset}>Reset</Button>
         </View>
