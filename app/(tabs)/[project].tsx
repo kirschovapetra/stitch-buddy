@@ -8,7 +8,7 @@ export default function Project() {
 
     return (
         <SafeAreaProvider>
-            <SafeAreaView style={styles.container}>
+            <SafeAreaView>
                 <ProjectDetail project={local.project}/>
             </SafeAreaView>
         </SafeAreaProvider>

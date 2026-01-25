@@ -5,7 +5,7 @@ import {ProjectsList} from "@/components/ui/ProjectsList";
 export default function Index() {
     return (
         <SafeAreaProvider>
-            <SafeAreaView style={styles.container}>
+            <SafeAreaView>
                 <ProjectsList/>
             </SafeAreaView>
         </SafeAreaProvider>

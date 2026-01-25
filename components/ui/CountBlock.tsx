@@ -1,6 +1,7 @@
-import {TextInput, Text, Button, View} from "react-native";
+import {View} from "react-native";
 import {useState, useEffect} from "react";
 import {styles} from "@/assets/styles";
+import { IconButton, Button, Text, TextInput } from 'react-native-paper';
 
 export default function CountBlock({ title, count, countTotal, setCount, setCountTotal }: any) {
     const [value, setValue] = useState<number>(count);
@@ -12,24 +13,27 @@ export default function CountBlock({ title, count, countTotal, setCount, setCoun
 
     return (
         <View>
-            <Text>{title}</Text>
+            <Text variant="titleMedium">{title}</Text>
 
-            <Text>
+            <Text variant="bodyMedium">
                 How many in total?
             </Text>
             <TextInput
                 keyboardType="numeric"
                 placeholder="0"
                 value={""+valueTotal}
+                mode="outlined"
+                dense
             />
             <View>
-                <Button onPress={decrement} title="MINUS" />
+                <IconButton icon="minus" mode="contained" onPress={() => console.log('Pressed Minus')}/>
                 <View>
-                    <Text>{value}</Text>
+                    <Text variant="bodyMedium">{value}</Text>
                 </View>
-                <Button onPress={increment} title="PLUS"/>
+                <IconButton icon="plus" mode="contained" onPress={() => console.log('Pressed Plus')}/>
             </View>
-            <Button onPress={reset} title="RESET" />
+            <Button mode="contained" onPress={() => console.log('Pressed Reset')}>Reset</Button>
+
         </View>
     );
 };
