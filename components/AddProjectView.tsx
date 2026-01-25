@@ -1,23 +1,22 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import {Button, TextInput, Text, HelperText} from "react-native-paper";
 import React, {useState} from "react";
-import {Project} from "@/assets/types";
 import {Router, useRouter} from "expo-router";
 import { View } from "react-native";
 import {styles} from "@/assets/styles";
-export const addProject = async (title:string, value:Project) => {
-
-    try {
-        await AsyncStorage.setItem(title,JSON.stringify(value));
-    } catch (e) {
-        console.error(e);
-    }
-
-};
+import {v4 as uuidv4} from 'uuid';
+import {addProject} from "@/scripts/script";
 
 export const done = async (router:Router, title:string, row:string, rowsTotal:string, stitch:string, stitchesTotal:string) => {
+    const uuid = uuidv4();
+    const timestamp =new Date();
 
-    await addProject(title, {
+    await addProject({
+            id: uuid,
+            name: title,
+            createdAt: timestamp,
+            updatedAt: timestamp,
+        },
+        {
         row: Number(row || "0"),
         rowsTotal: Number(rowsTotal || "0"),
         stitch: Number(stitch || "0"),
@@ -36,7 +35,6 @@ export function AddProjectView() {
     const router = useRouter();
 
     const hasErrors = () => {
-        console.log(title);
         return title === null || title.length === 0;
     };
 
@@ -91,7 +89,6 @@ export function AddProjectView() {
                     mode="contained"
                     onPress={() => {
                         setWasClicked(true);
-                        console.log(hasErrors());
                         if (!hasErrors())
                             done(router, title, row, rowsTotal, stitch, stitchesTotal);
                     }}>
