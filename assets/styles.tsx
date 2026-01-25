@@ -27,6 +27,11 @@ export const styles = StyleSheet.create({
         justifyContent:"center",
         textAlign: "center",
     },
+    projectListItemButtonContainer: {
+        justifyContent:"center",
+        textAlign: "center",
+        flexDirection:"row"
+    },
     centerTextContainer: {
         justifyContent:"center",
         textAlign: "center",

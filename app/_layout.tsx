@@ -5,10 +5,10 @@ import {theme} from "@/assets/styles";
 export default function RootLayout() {
 
     const [loaded] = useFonts({
-        'Lineseed-Bold': require('@/assets/fonts/LINE_Seed_JP/LINESeedJP-Bold.ttf'),
-        'Lineseed-ExtraBold': require('@/assets/fonts/LINE_Seed_JP/LINESeedJP-ExtraBold.ttf'),
-        'Lineseed-Thin': require('@/assets/fonts/LINE_Seed_JP/LINESeedJP-Thin.ttf'),
-        'Lineseed-Regular': require('@/assets/fonts/LINE_Seed_JP/LINESeedJP-Regular.ttf'),
+        'Lineseed-Bold': require('@/assets/fonts/LINESeedJP-Bold.ttf'),
+        'Lineseed-ExtraBold': require('@/assets/fonts/LINESeedJP-ExtraBold.ttf'),
+        'Lineseed-Thin': require('@/assets/fonts/LINESeedJP-Thin.ttf'),
+        'Lineseed-Regular': require('@/assets/fonts/LINESeedJP-Regular.ttf'),
     });
 
     const baseVariants = configureFonts({ config: { fontFamily: 'Lineseed-Regular'} });
