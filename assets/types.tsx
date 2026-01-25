@@ -8,3 +8,10 @@ export interface Project {
 export type ItemProps = {
     project: string
 }
+
+export type ProjectMetadata = {
+    id: string;
+    name: string;
+    createdAt: any;
+    updatedAt: any;
+};
