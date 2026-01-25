@@ -1,10 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {Animated} from "react-native";
-import {styles} from "@/assets/styles";
 import CountBlock from "@/components/ui/CountBlock";
-import ScrollView = Animated.ScrollView;
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {ItemProps, Project} from "@/assets/types";
+import {Project} from "@/assets/types";
 import { Text } from 'react-native-paper';
 const storeDataAsync = async (title: string, value: any) => {
     try {
@@ -25,7 +23,7 @@ const getProjectDataAsync = async (title: string): Promise<Project> => {
         return defaultJson;
     }
 };
-export default function ProjectDetail ({project}: ItemProps) {
+export default function ProjectDetail ({project}: any) {
 
     const [row, setRow] = useState<number>();
     const [rowsTotal, setRowsTotal] = useState<number>();
@@ -50,10 +48,10 @@ export default function ProjectDetail ({project}: ItemProps) {
 
 
     return (
-        <ScrollView>
-            <Text variant="titleMedium">{project}</Text>
+        <Animated.ScrollView>
+            <Text variant="titleLarge">{project}</Text>
             <CountBlock title="Row Counter" count={row} countTotal={rowsTotal} setCount={setRow} setCountTotal={setRowsTotal}/>
             <CountBlock title="Stitch Counter" count={stitch} countTotal={stitchesTotal} Count={setStitch} setCountTotal={setStitchesTotal}/>
-        </ScrollView>
+        </Animated.ScrollView>
     );
 }

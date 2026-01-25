@@ -1,15 +1,10 @@
 import {View} from "react-native";
 import {useState, useEffect} from "react";
-import {styles} from "@/assets/styles";
 import { IconButton, Button, Text, TextInput } from 'react-native-paper';
 
 export default function CountBlock({ title, count, countTotal, setCount, setCountTotal }: any) {
     const [value, setValue] = useState<number>(count);
     const [valueTotal, setValueTotal] = useState<number>(0);
-    const increment = () => { };
-    const decrement = () => { };
-    const reset = () => {
-    };
 
     return (
         <View>

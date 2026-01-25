@@ -1,8 +1,7 @@
-import {FlatList} from "react-native";
 import ProjectListItem from "@/components/ui/ProjectsListItem";
 import React, {useEffect, useState} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { List } from "react-native-paper";
+import {List, Text} from "react-native-paper";
 
 export const fetchAllProjects = async () => {
     try {
@@ -24,17 +23,8 @@ export function ProjectsList() {
     }, []);
 
     return (
-        // <FlatList
-        //     data={data}
-        //     renderItem={
-        //     ({item}) => <ProjectListItem project={item}/>
-        //     }
-        // />
-
-
-
         <List.Section>
-            <List.Subheader>Projects</List.Subheader>
+            <List.Subheader><Text variant="titleLarge">Projects</Text></List.Subheader>
             {data.map(item => {
                 return (
                     <ProjectListItem project={item} key={item}/>
