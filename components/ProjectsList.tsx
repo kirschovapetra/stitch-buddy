@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {FAB, List, Text, TextInput} from "react-native-paper";
-import {View, TextInput as NativeTextInput} from "react-native";
+import {FAB, List, Text} from "react-native-paper";
+import {View, useColorScheme} from "react-native";
 import {useRouter} from "expo-router";
-import {styles} from "@/assets/styles";
+import {getTheme, styles} from "@/assets/styles";
 import {DeletionDialog} from "@/components/DeletionDialog";
 import {compare, fetchKey, fetchMetadata} from "@/scripts/script";
 import {ProjectMetadata, SORT_BY, SORT_DIRECTION} from "@/assets/types";
@@ -24,6 +24,7 @@ export function ProjectsList() {
     const [sortBy, setSortBy] = useState<any>(SORT_BY.NAME);
     const [sortDirection, setSortDirection] = useState<any>(SORT_DIRECTION.ASC);
     const router = useRouter();
+    const theme = getTheme(useColorScheme())
 
     useEffect(() => {
         const loadProjects = async () => {
@@ -75,12 +76,12 @@ export function ProjectsList() {
 
     return (
         <>
-            <List.Section style={styles.mainContainer}>
+            <List.Section style={{...styles.mainContainer}}>
                 <View style={styles.projectsListHeaderContainer}>
                     <Text variant="titleLarge">Projects</Text>
                     <SortingMenu sortMetadata={sortMetadata} sortBy={sortBy} setSortBy={setSortBy} sortDirection={sortDirection} setSortDirection={setSortDirection}/>
                 </View>
-                { !isLoaded? <LoadingScreen/>
+                { !isLoaded? <LoadingScreen theme={theme}/>
                     : (metadata.length===0 ? <EmptyScreen/>
                             :metadata.map(item => {
                                 return (

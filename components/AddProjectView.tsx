@@ -1,8 +1,8 @@
 import {Button, TextInput, Text} from "react-native-paper";
 import React, {useState} from "react";
 import {useRouter} from "expo-router";
-import { View} from "react-native";
-import {styles} from "@/assets/styles";
+import {useColorScheme, View} from "react-native";
+import {getTheme, styles} from "@/assets/styles";
 import {v4 as uuidv4} from 'uuid';
 import {addProject} from "@/scripts/script";
 import {NumericTextInputFormWrapper} from "@/components/NumericTextInputFormWrapper";
@@ -17,6 +17,7 @@ export function AddProjectView() {
     const [title, setTitle] = useState("");
     const router = useRouter();
     const {control, handleSubmit, formState: { errors }} = useForm<ProjectForm>()
+    const theme = getTheme(useColorScheme())
     const submitProject = async () => {
         const uuid = uuidv4();
         const timestamp =new Date();
@@ -36,7 +37,7 @@ export function AddProjectView() {
     }
 
     return (
-        <View style={styles.mainContainer}>
+        <View style={{...styles.mainContainer}}>
             <Controller
                 name="title"
                 control={control}

@@ -1,8 +1,13 @@
 import { Stack } from "expo-router";
 import {configureFonts, PaperProvider, Text} from "react-native-paper";
 import {useFonts} from "expo-font";
-import {theme} from "@/assets/styles";
+import {getTheme} from "@/assets/styles";
+import {useColorScheme} from "react-native";
 export default function RootLayout() {
+
+
+    const colorScheme = useColorScheme();
+    const theme = getTheme(colorScheme)
 
     const [loaded] = useFonts({
         'Lineseed-Bold': require('@/assets/fonts/LINESeedJP-Bold.ttf'),
@@ -38,7 +43,7 @@ export default function RootLayout() {
     }
 
   return (
-      <PaperProvider theme={{ ...theme, fonts }}>
+      <PaperProvider theme={{ ...theme, fonts }} >
           <Stack screenOptions={{headerShown: false}}/>
       </PaperProvider>
   );

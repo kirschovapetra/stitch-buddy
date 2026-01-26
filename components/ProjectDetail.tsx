@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import {Animated} from "react-native";
+import {Animated, useColorScheme} from "react-native";
 import CountBlock from "@/components/CountBlock";
-import {Drawer, Text} from 'react-native-paper';
-import {styles} from "@/assets/styles";
+import {Text} from 'react-native-paper';
+import {getTheme, styles} from "@/assets/styles";
 import {fetchMetadataItem, getProjectDataAsync, storeDataAsync} from "@/scripts/script";
 import {LoadingScreen} from "@/components/LoadingScreen";
 
@@ -16,6 +16,7 @@ export default function ProjectDetail ({projectId}: { projectId:any }) {
     const [stitchesTotal, setStitchesTotal] = useState<number>();
     const [metadataItem, setMetadataItem] = useState<any>();
     const [isLoaded, setIsLoaded] = useState(false);
+    const theme = getTheme(useColorScheme())
 
     useEffect(() => {
         const getProjectData = async () => {
@@ -37,8 +38,8 @@ export default function ProjectDetail ({projectId}: { projectId:any }) {
     }, [row, rowsTotal, stitch, stitchesTotal, projectId, isLoaded]);
 
     return (
-        <Animated.ScrollView style={styles.mainContainer}>
-            {!isLoaded? <LoadingScreen/> :
+        <Animated.ScrollView style={{...styles.mainContainer}}>
+            {!isLoaded? <LoadingScreen theme={theme}/> :
                 <>
                     <Text variant="titleLarge" style={styles.projectTitle}>Project: {metadataItem.name}</Text>
                     <CountBlock title="Row Counter" count={row} countTotal={rowsTotal} setCount={setRow} setCountTotal={setRowsTotal}/>
