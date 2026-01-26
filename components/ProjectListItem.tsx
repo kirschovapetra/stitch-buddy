@@ -5,7 +5,7 @@ import {styles} from "@/assets/styles";
 import {ProjectMetadata} from "@/assets/types";
 import {useRouter} from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {fetchMetadata} from "@/scripts/script";
+import {fetchMetadata, fetchMetadataItem} from "@/scripts/script";
 
 export function ProjectsListItem({item, showDeletionDialog, metadata, setMetadata}: {item:ProjectMetadata, showDeletionDialog:any, metadata:any, setMetadata:any}) {
 
@@ -15,16 +15,13 @@ export function ProjectsListItem({item, showDeletionDialog, metadata, setMetadat
 
     const renameProject = async (id: string, name: string) => {
         try {
-            const found = metadata.find((element:ProjectMetadata)=> element.id===id);
-            if (found !== undefined) {
-                const idx = metadata.indexOf(found);
-                if (idx !== -1) {
-                    found.name = name;
-                    metadata[idx] = found;
-                    await AsyncStorage.setItem('metadata',JSON.stringify(metadata));
-                    setMetadata(await fetchMetadata());
-
-                }
+            const found =  await fetchMetadataItem(id);
+            const idx = metadata.indexOf(found);
+            if (idx !== -1) {
+                found.name = name;
+                metadata[idx] = found;
+                await AsyncStorage.setItem('metadata',JSON.stringify(metadata));
+                setMetadata(await fetchMetadata());
             }
         } catch (e) {
             console.error(e);
@@ -64,7 +61,7 @@ export function ProjectsListItem({item, showDeletionDialog, metadata, setMetadat
                 <View style={styles.projectListItemTextContainer}>
                     {editAllowed ? <TextInput error={editAllowed && tempName===""}
                                               label={tempName==="" ? "Name must be filled" : ""}
-                                              value={tempName} onChangeText={(text) => setTempName(text)}/> : <Text>{item.name}</Text>}
+                                              value={tempName} onChangeText={(text) => setTempName(text)}/> : <Text>{item.name} {item.createdAt} {item.updatedAt}</Text>}
                 </View>
                 <View style={styles.projectListItemButtonContainer}>
                     <IconButton mode="contained" icon={editAllowed ? "check" : "pencil-outline"} onPress={confirmEdit}/>
