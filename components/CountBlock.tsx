@@ -1,19 +1,28 @@
 import {View} from "react-native";
-import { IconButton, Button, Text, TextInput } from 'react-native-paper';
+import {IconButton, Button, Text, TextInput, ProgressBar} from 'react-native-paper';
 import {styles} from "@/assets/styles";
+import {useEffect, useState} from "react";
+import * as Haptics from 'expo-haptics';
 
 export default function CountBlock({title, count, countTotal, setCount, setCountTotal}: {title:any,count:any,countTotal:any,setCount:any,setCountTotal:any}) {
+    const [progress, setProgress] = useState<number>(0);
     const increment = () => {
         if (Number(count) < (Number(countTotal) || 0)) setCount(Number(count) + 1);
+        Haptics.selectionAsync()
     };
     const decrement = () => {
         if (Number(count) > 0) setCount(Number(count) - 1);
+        Haptics.selectionAsync()
     };
     const reset = () => {
         setCountTotal("0");
         setCount("0");
         alert("Reset successful")
     };
+
+    useEffect(()=> {
+        setProgress(Number(countTotal) === 0? 0: Number(count) / Number(countTotal))
+    },[count, countTotal])
 
     return (
         <View style={styles.mainContainer}>
@@ -29,6 +38,10 @@ export default function CountBlock({title, count, countTotal, setCount, setCount
                 dense
                 onChangeText={x=>setCountTotal(x)}
             />
+            <View style={styles.countBlockProgressBarContainer}>
+                <ProgressBar animatedValue={progress} style={{borderRadius:10}}/>
+            </View>
+
             <View style={styles.countBlockButtonsContainer}>
                 <IconButton icon="minus" mode="contained" onPress={decrement} disabled={Number(count) <= 0}/>
                 <View style={styles.centerTextContainer}>

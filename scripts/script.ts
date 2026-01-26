@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {Project, ProjectMetadata} from "@/assets/types";
+import {Project, ProjectMetadata, SORT_BY, SORT_DIRECTION} from "@/assets/types";
 
 export const addProject = async (metadata:ProjectMetadata, value:Project) => {
     try {
@@ -19,7 +19,6 @@ export const addProject = async (metadata:ProjectMetadata, value:Project) => {
     }
 };
 
-
 export const fetchMetadata = async () => {
     const defaultJson = { id: "", name: "", createdAt: "", updatedAt: ""};
     try {
@@ -32,6 +31,15 @@ export const fetchMetadata = async () => {
     }
 };
 
+export const fetchKey = async (key:any, defaultValue:any) => {
+    try {
+        return await AsyncStorage.getItem(key) || defaultValue;
+    } catch (e) {
+        console.error(e);
+        return defaultValue;
+    }
+};
+
 export const fetchMetadataItem = async (id:string) => {
     const currentMetadata =await fetchMetadata();
     return currentMetadata.filter((item) => item.id === id)[0] || {
@@ -41,3 +49,53 @@ export const fetchMetadataItem = async (id:string) => {
         updatedAt: "",
     };
 }
+
+
+export const getProjectDataAsync = async (projectId: string): Promise<any> => {
+    const defaultJson = {row:0,rowsTotal:0,stitch:0,stitchesTotal:0};
+    try {
+        const projectData = await AsyncStorage.getItem(`project:${projectId}`);
+        return projectData == null? defaultJson : JSON.parse(projectData);
+    } catch (e) {
+        console.error(e);
+        return defaultJson;
+    }
+};
+export const storeDataAsync = async (projectId: string, value: any) => {
+    try {
+        const jsonValue = JSON.stringify(value);
+        await AsyncStorage.setItem(`project:${projectId}`, jsonValue);
+        const metadata =  await fetchMetadata();
+        const found =  await fetchMetadataItem(projectId);
+        const idx = metadata.indexOf(found);
+        if (idx !== -1) {
+            found.updatedAt = new Date();
+            metadata[idx] = found;
+            await AsyncStorage.setItem('metadata',JSON.stringify(metadata));
+        }
+    } catch (e) {
+        console.error(e);
+    }
+};
+
+export const compare = (sortByProperty:SORT_BY, direction:SORT_DIRECTION) => {
+        const sortOrder = direction === SORT_DIRECTION.ASC? 1 : -1;
+        let property= "name";
+        switch(sortByProperty) {
+            case SORT_BY.NAME:
+                property= "name";
+                break;
+            case SORT_BY.CREATED:
+                property= "createdAt";
+                break;
+            case SORT_BY.UPDATED:
+                property= "updatedAt";
+                break;
+            default:
+                property= "name";
+        }
+    return function (a:any,b:any) {
+            const result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+            return result * sortOrder;
+        }
+    }

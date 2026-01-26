@@ -15,3 +15,14 @@ export type ProjectMetadata = {
     createdAt: any;
     updatedAt: any;
 };
+
+export enum SORT_DIRECTION {
+    ASC = "A to Z",
+    DESC = "Z to A",
+}
+
+export enum SORT_BY {
+    NAME = "Name",
+    CREATED = "Date Created",
+    UPDATED = "Date Modified",
+}
