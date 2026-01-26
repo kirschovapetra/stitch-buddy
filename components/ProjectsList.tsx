@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {Button, FAB, List, Text} from "react-native-paper";
-import {View} from "react-native";
+import {FAB, List, Text, TextInput} from "react-native-paper";
+import {View, TextInput as NativeTextInput} from "react-native";
 import {useRouter} from "expo-router";
 import {styles} from "@/assets/styles";
 import {DeletionDialog} from "@/components/DeletionDialog";

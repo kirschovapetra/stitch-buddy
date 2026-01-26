@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Animated} from "react-native";
 import CountBlock from "@/components/CountBlock";
-import {Text} from 'react-native-paper';
+import {Drawer, Text} from 'react-native-paper';
 import {styles} from "@/assets/styles";
 import {fetchMetadataItem, getProjectDataAsync, storeDataAsync} from "@/scripts/script";
 import {LoadingScreen} from "@/components/LoadingScreen";

@@ -5,6 +5,10 @@ export interface Project {
     stitchesTotal: number;
 }
 
+export interface ProjectForm extends Project {
+    title:string
+}
+
 export type ItemProps = {
     project: string
 }

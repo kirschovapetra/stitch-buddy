@@ -1,33 +1,25 @@
-import {Button, TextInput, Text, HelperText} from "react-native-paper";
+import {Button, TextInput, Text} from "react-native-paper";
 import React, {useState} from "react";
-import {Router, useRouter} from "expo-router";
-import { View } from "react-native";
+import {useRouter} from "expo-router";
+import { View} from "react-native";
 import {styles} from "@/assets/styles";
 import {v4 as uuidv4} from 'uuid';
 import {addProject} from "@/scripts/script";
+import {NumericTextInput} from "@/components/NumericTextInput";
+import {Controller, useForm} from "react-hook-form";
+import {ProjectForm} from "@/assets/types";
 
 export function AddProjectView() {
-    const [wasClicked, setWasClicked] = useState(false);
     const [row, setRow] = useState("");
     const [rowsTotal, setRowsTotal] = useState("");
     const [stitch, setStitch] = useState("");
     const [stitchesTotal, setStitchesTotal] = useState("");
     const [title, setTitle] = useState("");
     const router = useRouter();
-
-    const hasErrors = () => {
-        return title === null || title.length === 0;
-    };
-
+    const {control, handleSubmit, formState: { errors }} = useForm<ProjectForm>()
     const submitProject = async () => {
-
-        setWasClicked(true);
-
-        if (hasErrors()) return;
-
         const uuid = uuidv4();
         const timestamp =new Date();
-
         await addProject({
                 id: uuid,
                 name: title,
@@ -43,57 +35,71 @@ export function AddProjectView() {
         router.navigate("/");
     }
 
-
     return (
         <View style={styles.mainContainer}>
-            <TextInput
-                value={title}
-                mode="outlined"
-                dense
-                label={<Text>Project title<Text style={{ color: 'red' }}> *</Text></Text>}
-                onChangeText={x => setTitle(x)}
+            <Controller
+                name="title"
+                control={control}
+                rules={{
+                    validate: () => {
+                        return title!==null && title.length > 0 ? true : "Project Title is required.";
+                    }
+                }}
+                render={(field) => (
+                    <TextInput {...field}
+                        value={title}
+                        mode="outlined"
+                        dense
+                        label={<Text>Project title<Text style={{ color: 'red' }}> *</Text></Text>}
+                        onChangeText={x => setTitle(x)}
+                        error={errors.title !== undefined}
+                    />
+                )}
             />
-            <TextInput
-                keyboardType="numeric"
+            {errors.title && <Text style={{ color: 'red' }}>{errors.title.message}</Text>}
+
+            <NumericTextInput
+                name="row"
                 value={row}
-                mode="outlined"
-                dense
-                label="Current row"
-                onChangeText={x => setRow(x)}
-            />
-            <TextInput
-                keyboardType="numeric"
-                value={rowsTotal}
-                mode="outlined"
-                dense
-                label="Rows total"
-                onChangeText={x => setRowsTotal(x)}
-            />
-            <TextInput
-                keyboardType="numeric"
-                value={stitch}
-                mode="outlined"
-                dense
-                label="Current stitch"
-                onChangeText={x => setStitch(x)}
-            />
-            <TextInput
-                keyboardType="numeric"
-                value={stitchesTotal}
-                mode="outlined"
-                dense
-                label="Stitches per Row total"
-                onChangeText={x => setStitchesTotal(x)}
+                setValue={setRow}
+                label="Row"
+                errorValue={errors.row}
+                control={control}
+                customValidation={Number(row) > Number(rowsTotal) ? "Current Row must be lesser than or equal to Total Row amount" : null}
             />
 
-            <HelperText type="error" visible={wasClicked && hasErrors()} padding="none" style={styles.addProjectButtonsContainer}>
-                Project title is required
-            </HelperText>
+            <NumericTextInput
+                name="rowsTotal"
+                value={rowsTotal}
+                setValue={setRowsTotal}
+                label="Rows Total"
+                errorValue={errors.rowsTotal}
+                control={control}/>
+
+
+            <NumericTextInput
+                name="stitch"
+                value={stitch}
+                setValue={setStitch}
+                label="Stitch"
+                errorValue={errors.stitch}
+                control={control}
+                customValidation={Number(stitch) > Number(stitchesTotal) ? "Current Stitch must be lesser than or equal to Total Stitch amount" : null}
+            />
+
+            <NumericTextInput
+                name="stitchesTotal"
+                value={stitchesTotal}
+                setValue={setStitchesTotal}
+                label="Stitches Total"
+                errorValue={errors.stitchesTotal}
+                control={control}/>
+
             <View style={styles.addProjectButtonsContainer}>
 
                 <Button
                     mode="contained"
-                    onPress={submitProject}>
+                    onPress={handleSubmit(submitProject)}>
                     Done
                 </Button>
             </View>
