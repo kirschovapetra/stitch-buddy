@@ -5,7 +5,7 @@ import { View} from "react-native";
 import {styles} from "@/assets/styles";
 import {v4 as uuidv4} from 'uuid';
 import {addProject} from "@/scripts/script";
-import {NumericTextInput} from "@/components/NumericTextInput";
+import {NumericTextInputFormWrapper} from "@/components/NumericTextInputFormWrapper";
 import {Controller, useForm} from "react-hook-form";
 import {ProjectForm} from "@/assets/types";
 
@@ -58,7 +58,7 @@ export function AddProjectView() {
             />
             {errors.title && <Text style={{ color: 'red' }}>{errors.title.message}</Text>}
 
-            <NumericTextInput
+            <NumericTextInputFormWrapper
                 name="row"
                 value={row}
                 setValue={setRow}
@@ -68,7 +68,7 @@ export function AddProjectView() {
                 customValidation={Number(row) > Number(rowsTotal) ? "Current Row must be lesser than or equal to Total Row amount" : null}
             />
 
-            <NumericTextInput
+            <NumericTextInputFormWrapper
                 name="rowsTotal"
                 value={rowsTotal}
                 setValue={setRowsTotal}
@@ -77,7 +77,7 @@ export function AddProjectView() {
                 control={control}/>
 
 
-            <NumericTextInput
+            <NumericTextInputFormWrapper
                 name="stitch"
                 value={stitch}
                 setValue={setStitch}
@@ -87,7 +87,7 @@ export function AddProjectView() {
                 customValidation={Number(stitch) > Number(stitchesTotal) ? "Current Stitch must be lesser than or equal to Total Stitch amount" : null}
             />
 
-            <NumericTextInput
+            <NumericTextInputFormWrapper
                 name="stitchesTotal"
                 value={stitchesTotal}
                 setValue={setStitchesTotal}
