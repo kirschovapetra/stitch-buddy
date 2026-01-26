@@ -3,29 +3,11 @@ import {Animated} from "react-native";
 import CountBlock from "@/components/CountBlock";
 import {Text} from 'react-native-paper';
 import {styles} from "@/assets/styles";
-import {fetchMetadataItem} from "@/scripts/script";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import {fetchMetadataItem, getProjectDataAsync, storeDataAsync} from "@/scripts/script";
+import {LoadingScreen} from "@/components/LoadingScreen";
 
 
 
-export const getProjectDataAsync = async (projectId: string): Promise<any> => {
-    const defaultJson = {row:0,rowsTotal:0,stitch:0,stitchesTotal:0};
-    try {
-        const projectData = await AsyncStorage.getItem(`project:${projectId}`);
-        return projectData == null? defaultJson : JSON.parse(projectData);
-    } catch (e) {
-        console.error(e);
-        return defaultJson;
-    }
-};
-const storeDataAsync = async (projectId: string, value: any) => {
-    try {
-        const jsonValue = JSON.stringify(value);
-        await AsyncStorage.setItem(`project:${projectId}`, jsonValue);
-    } catch (e) {
-        console.error(e);
-    }
-};
 export default function ProjectDetail ({projectId}: { projectId:any }) {
 
     const [row, setRow] = useState<number>();
@@ -56,9 +38,13 @@ export default function ProjectDetail ({projectId}: { projectId:any }) {
 
     return (
         <Animated.ScrollView style={styles.mainContainer}>
-            <Text variant="titleLarge" style={styles.projectTitle}>Project: {(metadataItem=== null || metadataItem === undefined) ? "":metadataItem.name}</Text>
-            <CountBlock title="Row Counter" count={row} countTotal={rowsTotal} setCount={setRow} setCountTotal={setRowsTotal}/>
-            <CountBlock title="Stitch Counter" count={stitch} countTotal={stitchesTotal} setCount={setStitch} setCountTotal={setStitchesTotal}/>
+            {!isLoaded? <LoadingScreen/> :
+                <>
+                    <Text variant="titleLarge" style={styles.projectTitle}>Project: {metadataItem.name}</Text>
+                    <CountBlock title="Row Counter" count={row} countTotal={rowsTotal} setCount={setRow} setCountTotal={setRowsTotal}/>
+                    <CountBlock title="Stitch Counter" count={stitch} countTotal={stitchesTotal} setCount={setStitch} setCountTotal={setStitchesTotal}/>
+                </>
+            }
         </Animated.ScrollView>
     );
 }

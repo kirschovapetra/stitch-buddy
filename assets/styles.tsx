@@ -4,6 +4,9 @@ export const styles = StyleSheet.create({
     mainContainer:{
         marginHorizontal:16
     },
+    activityIndicator:{
+        marginVertical:20
+    },
     projectsListItemContainer: {
         paddingHorizontal:20,
         paddingVertical:5,
@@ -14,11 +17,20 @@ export const styles = StyleSheet.create({
         alignContent:"center",
         borderRadius:10
     },
+    projectsListHeaderContainer: {
+        flex:2,
+        paddingVertical: 5,
+        flexDirection:"row",
+        justifyContent:"space-between"
+    },
+
     countBlockButtonsContainer: {
         flex:1,
         flexDirection:"row",
         justifyContent:"center",
         alignContent:"center"
+    },countBlockProgressBarContainer: {
+        paddingVertical:10
     },
     countBlockResetButton: {
       marginBottom:5
@@ -61,6 +73,10 @@ export const styles = StyleSheet.create({
         flexDirection:"row",
         textAlign: "center"
     },
+    sortMenuText: {
+        marginLeft:10,
+        marginTop:5
+    }
 });
 
 export const theme = {

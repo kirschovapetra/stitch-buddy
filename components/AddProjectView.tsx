@@ -6,25 +6,6 @@ import {styles} from "@/assets/styles";
 import {v4 as uuidv4} from 'uuid';
 import {addProject} from "@/scripts/script";
 
-export const done = async (router:Router, title:string, row:string, rowsTotal:string, stitch:string, stitchesTotal:string) => {
-    const uuid = uuidv4();
-    const timestamp =new Date();
-
-    await addProject({
-            id: uuid,
-            name: title,
-            createdAt: timestamp,
-            updatedAt: timestamp,
-        },
-        {
-        row: Number(row || "0"),
-        rowsTotal: Number(rowsTotal || "0"),
-        stitch: Number(stitch || "0"),
-        stitchesTotal: Number(stitchesTotal || "0")
-    });
-    router.navigate("/");
-}
-
 export function AddProjectView() {
     const [wasClicked, setWasClicked] = useState(false);
     const [row, setRow] = useState("");
@@ -37,6 +18,31 @@ export function AddProjectView() {
     const hasErrors = () => {
         return title === null || title.length === 0;
     };
+
+    const submitProject = async () => {
+
+        setWasClicked(true);
+
+        if (hasErrors()) return;
+
+        const uuid = uuidv4();
+        const timestamp =new Date();
+
+        await addProject({
+                id: uuid,
+                name: title,
+                createdAt: timestamp,
+                updatedAt: timestamp,
+            },
+            {
+                row: Number(row || "0"),
+                rowsTotal: Number(rowsTotal || "0"),
+                stitch: Number(stitch || "0"),
+                stitchesTotal: Number(stitchesTotal || "0")
+            });
+        router.navigate("/");
+    }
+
 
     return (
         <View style={styles.mainContainer}>
@@ -87,11 +93,7 @@ export function AddProjectView() {
 
                 <Button
                     mode="contained"
-                    onPress={() => {
-                        setWasClicked(true);
-                        if (!hasErrors())
-                            done(router, title, row, rowsTotal, stitch, stitchesTotal);
-                    }}>
+                    onPress={submitProject}>
                     Done
                 </Button>
             </View>
