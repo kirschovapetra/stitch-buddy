@@ -176,9 +176,8 @@ const dark = {
 
 };
 
-export const getTheme = (colorScheme:ColorSchemeName) => {
+export const getTheme = (colorScheme:ColorSchemeName|string) => {
     return colorScheme === 'dark'
-        // ? {...MD3DarkTheme, colors: dark}
-        ? {...MD3DarkTheme, colors: light}
+        ? {...MD3DarkTheme, colors: dark}
         : {...MD3LightTheme, colors: light};
 }

@@ -1,13 +1,17 @@
 import React from "react";
-import {ActivityIndicator} from "react-native";
-import {styles} from "@/assets/styles";
-
+import {ActivityIndicator, View} from "react-native";
+import {useTheme} from "react-native-paper";
 /**
  *
  * @constructor
  */
 export function LoadingScreen() {
+    const theme = useTheme();
     return (
-        <ActivityIndicator animating={true} size="large" style={styles.activityIndicator}/>
+        <View style={{flex: 1,
+            justifyContent: "center",
+            alignItems: "center"}}>
+            <ActivityIndicator animating={true} size="large" color={theme.colors.primary} style={{marginTop:30}}/>
+        </View>
     );
 }

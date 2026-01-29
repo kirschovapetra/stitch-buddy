@@ -1,5 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {Project, ProjectMetadata, SORT_BY, SORT_DIRECTION} from "@/assets/types";
+import {MD3DarkTheme, MD3LightTheme} from "react-native-paper";
+import {ColorSchemeName} from "react-native";
+import {getTheme} from "@/assets/styles";
 
 /**
  *
@@ -146,4 +149,5 @@ export const compare = (sortByProperty?:string|SORT_BY, direction?:string|SORT_D
             const result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
             return result * sortOrder;
         }
-    }
+    };
+

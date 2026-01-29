@@ -5,13 +5,14 @@ import {styles} from "@/assets/styles";
 import {fetchMetadataItem, getProjectDataAsync, storeDataAsync} from "@/scripts/script";
 import {LoadingScreen} from "@/components/ui/LoadingScreen";
 import {CustomHeader} from "@/components/helpers/CustomHeader";
+import {useRouter} from "expo-router";
 
 /**
  *
  * @param projectId
  * @constructor
  */
-export default function ProjectDetail ({projectId}: { projectId:string }) {
+export default function ProjectDetail ({setTheme, projectId}: { projectId:string, setTheme:any }) {
 
     const [row, setRow] = useState<number>(0);
     const [rowsTotal, setRowsTotal] = useState<number>(0);
@@ -19,6 +20,7 @@ export default function ProjectDetail ({projectId}: { projectId:string }) {
     const [stitchesTotal, setStitchesTotal] = useState<number>(0);
     const [metadataItem, setMetadataItem] = useState<any>();
     const [isLoaded, setIsLoaded] = useState(false);
+    const router = useRouter();
 
     useEffect(() => {
         const getProjectData = async () => {
@@ -43,7 +45,7 @@ export default function ProjectDetail ({projectId}: { projectId:string }) {
         <>
             {!isLoaded ? <LoadingScreen/> :
                 <>
-                    <CustomHeader title={`${metadataItem.name}`}/>
+                    <CustomHeader title={`${metadataItem.name}`} setTheme={setTheme}/>
                     <Animated.ScrollView style={{...styles.mainContainer}}>
                         <>
                             <CountBlock title="Row Counter" count={row} countTotal={rowsTotal} setCount={setRow} setCountTotal={setRowsTotal}/>

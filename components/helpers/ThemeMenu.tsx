@@ -2,14 +2,16 @@ import * as React from 'react';
 import { Menu,  Appbar} from 'react-native-paper';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import {styles} from "@/assets/styles";
+import {getTheme, styles} from "@/assets/styles";
 import {useEffect} from "react";
 import {fetchKey} from "@/scripts/script";
 import {THEME} from "@/assets/types";
-export function ThemeMenu() {
+import {useColorScheme} from "react-native";
+export function ThemeMenu({setTheme}:{setTheme:any}) {
     const [visible, setVisible] = React.useState<boolean>(false);
     const [selected, setSelected] = React.useState<any>(THEME.DEFAULT);
     const [isLoaded, setIsLoaded] = React.useState<boolean>(false);
+    const defaultScheme = useColorScheme()
 
     useEffect(() => {
         const loadTheme = async () => {
@@ -27,6 +29,8 @@ export function ThemeMenu() {
         setSelected(theme);
         await AsyncStorage.setItem("theme", theme);
         setVisible(false);
+        if (theme === "default") setTheme(getTheme(defaultScheme))
+        else setTheme(getTheme(theme))
     };
 
     return (

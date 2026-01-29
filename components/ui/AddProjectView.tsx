@@ -14,7 +14,7 @@ import {BUTTON_MODE, ProjectForm, TEXTINPUT_MODE} from "@/assets/types";
  *
  * @constructor
  */
-export function AddProjectView() {
+export function AddProjectView({setTheme}:{setTheme:any}) {
     const [row, setRow] = useState<number>(0);
     const [rowsTotal, setRowsTotal] = useState<number>(0);
     const [stitch, setStitch] = useState<number>(0);
@@ -42,7 +42,7 @@ export function AddProjectView() {
 
     return (
         <>
-            <CustomHeader title={"Add project"}/>
+            <CustomHeader title={"Add project"} setTheme={setTheme}/>
             <View style={{...styles.mainContainer}}>
             <Controller
                 name="title"

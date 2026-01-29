@@ -16,7 +16,7 @@ import {ThemeMenu} from "@/components/helpers/ThemeMenu";
  *
  * @constructor
  */
-export function ProjectsList() {
+export function ProjectsList({setTheme}:{setTheme:any}) {
     const [isLoaded, setIsLoaded] = useState(false)
     const [metadata, setMetadata] = useState<ProjectMetadata[]>([])
     const [deletionDialogVisible, setDeletionDialogVisible] = useState(false);
@@ -113,7 +113,7 @@ export function ProjectsList() {
                         onBlur={() => setSearchBarVisible(false)}/>
                 }
                 <Appbar.Action icon="magnify" onPress={() => setSearchBarVisible(!searchBarVisible)}/>
-                <ThemeMenu/>
+                <ThemeMenu setTheme={setTheme}/>
             </Appbar.Header>
             <List.Section style={styles.mainContainer}>
                 <View style={styles.projectsListHeaderContainer}>
@@ -139,6 +139,7 @@ export function ProjectsList() {
             <View style={{...styles.mainContainer, ...styles.projectsListButtonsContainer}}>
                 <FAB icon="plus-circle" variant="secondary" onPress={()=>router.navigate(`/add`)} size="medium"/>
             </View>
+
             <DeletionDialog
                 visible={deletionDialogVisible}
                 item={dialogItem}
