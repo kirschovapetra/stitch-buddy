@@ -19,7 +19,7 @@ export function CustomHeader({title, setTheme}:ThemeProps) {
         <Appbar.Header style={{...styles.projectsListHeaderContainer,
             backgroundColor:theme.colors.background}}>
             <Appbar.BackAction onPress={() => router.navigate("/")} />
-            <Appbar.Content title={title} titleStyle={{paddingVertical:8}}/>
+            <Appbar.Content title={title||""} titleStyle={{paddingVertical:8}}/>
             <ThemeMenu setTheme={setTheme}/>
         </Appbar.Header>
     );
