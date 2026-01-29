@@ -66,5 +66,11 @@ export enum SORT_BY {
     UPDATED = "Date Modified",
 }
 
+export enum THEME {
+    LIGHT = "light",
+    DARK = "dark",
+    DEFAULT = "default",
+}
+
 export const BUTTON_MODE = "contained";
 export const TEXTINPUT_MODE = "outlined";

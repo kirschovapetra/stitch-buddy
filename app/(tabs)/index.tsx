@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
-import {ProjectsList} from "@/components/ProjectsList";
+import {ProjectsList} from "@/components/ui/ProjectsList";
 /**
  *
  * @constructor

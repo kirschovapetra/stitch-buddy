@@ -27,6 +27,23 @@ export const addProject = async (metadata:ProjectMetadata, value:Project) => {
 /**
  *
  */
+export const renameProject = async (metadata:ProjectMetadata[], id: string, name: string) => {
+    try {
+        const found =  await fetchMetadataItem(id);
+        const idx = metadata.indexOf(found);
+        if (idx !== -1) {
+            found.name = name;
+            metadata[idx] = found;
+            await AsyncStorage.setItem('metadata',JSON.stringify(metadata));
+        }
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+/**
+ *
+ */
 export const fetchMetadata = async () => {
     const defaultJson = { id: "", name: "", createdAt: "", updatedAt: ""};
     try {
@@ -109,7 +126,7 @@ export const storeDataAsync = async (projectId: string, value: Project) => {
  * @param sortByProperty
  * @param direction
  */
-export const compare = (sortByProperty:SORT_BY, direction:SORT_DIRECTION) => {
+export const compare = (sortByProperty?:string|SORT_BY, direction?:string|SORT_DIRECTION) => {
         const sortOrder = direction === SORT_DIRECTION.ASC? 1 : -1;
         let property= "name";
         switch(sortByProperty) {

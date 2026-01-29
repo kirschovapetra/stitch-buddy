@@ -1,7 +1,7 @@
 import {Text} from "react-native-paper";
 import React from "react";
 import {Controller} from "react-hook-form";
-import {NumericTextInput} from "@/components/NumericTextInput";
+import {NumericTextInput} from "@/components/helpers/NumericTextInput";
 import {NumericTextInputFormWrapperProps} from "@/assets/types";
 
 /**

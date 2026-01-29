@@ -1,6 +1,5 @@
 import {ColorSchemeName, StyleSheet} from 'react-native';
 import { MD3DarkTheme, MD3LightTheme} from "react-native-paper";
-import {ThemeProp} from "react-native-paper/src/types";
 export const styles = StyleSheet.create({
     mainContainer:{
         marginHorizontal:16
@@ -24,7 +23,9 @@ export const styles = StyleSheet.create({
         flexDirection:"row",
         justifyContent:"space-between"
     },
-
+    menuContent: {
+        marginTop:50
+    },
     countBlockButtonsContainer: {
         flex:1,
         flexDirection:"row",
@@ -39,6 +40,8 @@ export const styles = StyleSheet.create({
     projectListItemTextContainer: {
         justifyContent:"center",
         textAlign: "center",
+        flex: 1,
+        flexWrap: 'wrap'
     },
     projectListItemButtonContainer: {
         justifyContent:"center",
@@ -72,7 +75,8 @@ export const styles = StyleSheet.create({
         justifyContent:"center",
         alignItems: "center",
         flexDirection:"row",
-        textAlign: "center"
+        textAlign: "center",
+        marginTop:10
     },
     sortMenuText: {
         marginLeft:10,
@@ -174,6 +178,7 @@ const dark = {
 
 export const getTheme = (colorScheme:ColorSchemeName) => {
     return colorScheme === 'dark'
-        ? {...MD3DarkTheme, colors: dark}
+        // ? {...MD3DarkTheme, colors: dark}
+        ? {...MD3DarkTheme, colors: light}
         : {...MD3LightTheme, colors: light};
 }

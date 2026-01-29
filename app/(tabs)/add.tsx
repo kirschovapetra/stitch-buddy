@@ -1,6 +1,6 @@
 import {SafeAreaProvider, SafeAreaView} from "react-native-safe-area-context";
 import React from "react";
-import {AddProjectView} from "@/components/AddProjectView";
+import {AddProjectView} from "@/components/ui/AddProjectView";
 
 /**
  *

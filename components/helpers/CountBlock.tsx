@@ -3,7 +3,7 @@ import {IconButton, Button, Text, ProgressBar} from 'react-native-paper';
 import {styles} from "@/assets/styles";
 import React, {useState} from "react";
 import * as Haptics from 'expo-haptics';
-import {NumericTextInput} from "@/components/NumericTextInput";
+import {NumericTextInput} from "@/components/helpers/NumericTextInput";
 import {BUTTON_MODE, CountBlockProps} from "@/assets/types";
 
 /**
@@ -19,11 +19,11 @@ export default function CountBlock({title, count, countTotal, setCount, setCount
     const [progressBarKey, setProgressBarKey] = useState<number>(0);
     const increment = () => {
         if (count < (countTotal || 0)) setCount(count + 1);
-        Haptics.selectionAsync()
+        Haptics.selectionAsync().then(() => {})
     };
     const decrement = () => {
         if (count > 0) setCount(count - 1);
-        Haptics.selectionAsync()
+        Haptics.selectionAsync().then(() => {})
     };
     const reset = () => {
         setCountTotal(0);

@@ -25,7 +25,8 @@ export function SortingMenu({sortMetadata, sortBy, setSortBy, sortDirection, set
     };
 
     return (
-        <Menu visible={visible}
+        <Menu contentStyle={styles.menuContent}
+              visible={visible}
               onDismiss={()=>closeMenu(sortBy, sortDirection)}
               anchor={
             <Button contentStyle={{ flexDirection: 'row-reverse'}}
@@ -65,4 +66,4 @@ export function SortingMenu({sortMetadata, sortBy, setSortBy, sortDirection, set
                        disabled={sortDirection===SORT_DIRECTION.DESC}/>
         </Menu>
     );
-};
+}

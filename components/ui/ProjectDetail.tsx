@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {Animated} from "react-native";
-import CountBlock from "@/components/CountBlock";
+import CountBlock from "@/components/helpers/CountBlock";
 import {styles} from "@/assets/styles";
 import {fetchMetadataItem, getProjectDataAsync, storeDataAsync} from "@/scripts/script";
-import {LoadingScreen} from "@/components/LoadingScreen";
+import {LoadingScreen} from "@/components/ui/LoadingScreen";
+import {CustomHeader} from "@/components/helpers/CustomHeader";
 
 /**
  *
@@ -12,7 +13,6 @@ import {LoadingScreen} from "@/components/LoadingScreen";
  */
 export default function ProjectDetail ({projectId}: { projectId:string }) {
 
-    const [visible, setVisible] = useState<boolean>(false);
     const [row, setRow] = useState<number>(0);
     const [rowsTotal, setRowsTotal] = useState<number>(0);
     const [stitch, setStitch] = useState<number>(0);
@@ -40,13 +40,18 @@ export default function ProjectDetail ({projectId}: { projectId:string }) {
     }, [row, rowsTotal, stitch, stitchesTotal, projectId, isLoaded]);
 
     return (
-        <Animated.ScrollView style={{...styles.mainContainer}}>
-            {!isLoaded? <LoadingScreen/> :
+        <>
+            {!isLoaded ? <LoadingScreen/> :
                 <>
-                    <CountBlock title="Row Counter" count={row} countTotal={rowsTotal} setCount={setRow} setCountTotal={setRowsTotal}/>
-                    <CountBlock title="Stitch Counter" count={stitch} countTotal={stitchesTotal} setCount={setStitch} setCountTotal={setStitchesTotal}/>
+                    <CustomHeader title={`${metadataItem.name}`}/>
+                    <Animated.ScrollView style={{...styles.mainContainer}}>
+                        <>
+                            <CountBlock title="Row Counter" count={row} countTotal={rowsTotal} setCount={setRow} setCountTotal={setRowsTotal}/>
+                            <CountBlock title="Stitch Counter" count={stitch} countTotal={stitchesTotal} setCount={setStitch} setCountTotal={setStitchesTotal}/>
+                        </>
+                    </Animated.ScrollView>
                 </>
             }
-        </Animated.ScrollView>
+        </>
     );
 }

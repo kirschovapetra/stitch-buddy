@@ -1,11 +1,12 @@
-import {Button, TextInput, Text, Appbar} from "react-native-paper";
+import {Button, TextInput, Text} from "react-native-paper";
 import React, {useState} from "react";
 import {useRouter} from "expo-router";
 import {View} from "react-native";
 import {styles} from "@/assets/styles";
-import {v4 as uuidv4} from 'uuid';
+import {v4 as uuidV4} from 'uuid';
 import {addProject} from "@/scripts/script";
-import {NumericTextInputFormWrapper} from "@/components/NumericTextInputFormWrapper";
+import {NumericTextInputFormWrapper} from "@/components/helpers/NumericTextInputFormWrapper";
+import {CustomHeader} from "@/components/helpers/CustomHeader";
 import {Controller, useForm} from "react-hook-form";
 import {BUTTON_MODE, ProjectForm, TEXTINPUT_MODE} from "@/assets/types";
 
@@ -22,7 +23,7 @@ export function AddProjectView() {
     const router = useRouter();
     const {control, handleSubmit, formState: { errors }} = useForm<ProjectForm>()
     const submitProject = async () => {
-        const uuid = uuidv4();
+        const uuid = uuidV4();
         const timestamp =new Date();
         await addProject({
                 id: uuid,
@@ -40,7 +41,9 @@ export function AddProjectView() {
     }
 
     return (
-        <View style={{...styles.mainContainer}}>
+        <>
+            <CustomHeader title={"Add project"}/>
+            <View style={{...styles.mainContainer}}>
             <Controller
                 name="title"
                 control={control}
@@ -111,5 +114,6 @@ export function AddProjectView() {
             </View>
 
         </View>
+        </>
     );
 }
