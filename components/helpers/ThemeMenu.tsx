@@ -5,9 +5,15 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import {getTheme, styles} from "@/assets/styles";
 import {useEffect} from "react";
 import {fetchKey} from "@/scripts/script";
-import {THEME} from "@/assets/types";
+import {THEME, ThemeProps} from "@/assets/types";
 import {useColorScheme} from "react-native";
-export function ThemeMenu({setTheme}:{setTheme:any}) {
+
+/**
+ *
+ * @param setTheme
+ * @constructor
+ */
+export function ThemeMenu({setTheme}:ThemeProps) {
     const [visible, setVisible] = React.useState<boolean>(false);
     const [selected, setSelected] = React.useState<any>(THEME.DEFAULT);
     const [isLoaded, setIsLoaded] = React.useState<boolean>(false);
