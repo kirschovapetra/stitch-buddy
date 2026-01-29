@@ -1,6 +1,11 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {Project, ProjectMetadata, SORT_BY, SORT_DIRECTION} from "@/assets/types";
 
+/**
+ *
+ * @param metadata
+ * @param value
+ */
 export const addProject = async (metadata:ProjectMetadata, value:Project) => {
     try {
 
@@ -19,6 +24,9 @@ export const addProject = async (metadata:ProjectMetadata, value:Project) => {
     }
 };
 
+/**
+ *
+ */
 export const fetchMetadata = async () => {
     const defaultJson = { id: "", name: "", createdAt: "", updatedAt: ""};
     try {
@@ -31,7 +39,12 @@ export const fetchMetadata = async () => {
     }
 };
 
-export const fetchKey = async (key:any, defaultValue:any) => {
+/**
+ *
+ * @param key
+ * @param defaultValue
+ */
+export const fetchKey = async (key:string, defaultValue?:string) => {
     try {
         return await AsyncStorage.getItem(key) || defaultValue;
     } catch (e) {
@@ -40,6 +53,10 @@ export const fetchKey = async (key:any, defaultValue:any) => {
     }
 };
 
+/**
+ *
+ * @param id
+ */
 export const fetchMetadataItem = async (id:string) => {
     const currentMetadata =await fetchMetadata();
     return currentMetadata.filter((item) => item.id === id)[0] || {
@@ -50,8 +67,11 @@ export const fetchMetadataItem = async (id:string) => {
     };
 }
 
-
-export const getProjectDataAsync = async (projectId: string): Promise<any> => {
+/**
+ *
+ * @param projectId
+ */
+export const getProjectDataAsync = async (projectId: string): Promise<Project> => {
     const defaultJson = {row:0,rowsTotal:0,stitch:0,stitchesTotal:0};
     try {
         const projectData = await AsyncStorage.getItem(`project:${projectId}`);
@@ -61,7 +81,13 @@ export const getProjectDataAsync = async (projectId: string): Promise<any> => {
         return defaultJson;
     }
 };
-export const storeDataAsync = async (projectId: string, value: any) => {
+
+/**
+ *
+ * @param projectId
+ * @param value
+ */
+export const storeDataAsync = async (projectId: string, value: Project) => {
     try {
         const jsonValue = JSON.stringify(value);
         await AsyncStorage.setItem(`project:${projectId}`, jsonValue);
@@ -78,6 +104,11 @@ export const storeDataAsync = async (projectId: string, value: any) => {
     }
 };
 
+/**
+ *
+ * @param sortByProperty
+ * @param direction
+ */
 export const compare = (sortByProperty:SORT_BY, direction:SORT_DIRECTION) => {
         const sortOrder = direction === SORT_DIRECTION.ASC? 1 : -1;
         let property= "name";

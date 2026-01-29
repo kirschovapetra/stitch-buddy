@@ -2,12 +2,20 @@ import React, {useState} from "react";
 import {IconButton, Surface, Text, TextInput} from "react-native-paper";
 import {TouchableOpacity, View} from "react-native";
 import {styles} from "@/assets/styles";
-import {ProjectMetadata} from "@/assets/types";
+import {BUTTON_MODE, ProjectListItemProps} from "@/assets/types";
 import {useRouter} from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {fetchMetadata, fetchMetadataItem} from "@/scripts/script";
 
-export function ProjectsListItem({item, showDeletionDialog, metadata, setMetadata}: {item:ProjectMetadata, showDeletionDialog:any, metadata:any, setMetadata:any}) {
+/**
+ *
+ * @param item
+ * @param showDeletionDialog
+ * @param metadata
+ * @param setMetadata
+ * @constructor
+ */
+export function ProjectsListItem({item, showDeletionDialog, metadata, setMetadata}: ProjectListItemProps) {
 
     const [editAllowed, setEditAllowed] = useState(false)
     const [tempName, setTempName] = useState("")
@@ -30,9 +38,7 @@ export function ProjectsListItem({item, showDeletionDialog, metadata, setMetadat
 
     const confirmEdit = () => {
         if (editAllowed) {
-
-            if (tempName=== "")
-                return;
+            if (tempName.length === 0) return;
 
             renameProject(item.id, tempName);
         }
@@ -59,13 +65,15 @@ export function ProjectsListItem({item, showDeletionDialog, metadata, setMetadat
         <TouchableOpacity key={item.id} onPress={allowPress}>
             <Surface elevation={2} style={styles.projectsListItemContainer}>
                 <View style={styles.projectListItemTextContainer}>
-                    {editAllowed ? <TextInput error={editAllowed && tempName===""}
-                                              label={tempName==="" ? "Name must be filled" : ""}
-                                              value={tempName} onChangeText={(text) => setTempName(text)}/> : <Text>{item.name} {item.createdAt} {item.updatedAt}</Text>}
+                    {editAllowed ?
+                        <TextInput error={editAllowed && tempName===""}
+                                   label={tempName==="" ? "Name must be filled" : ""}
+                                   value={tempName} onChangeText={(text) => setTempName(text)}/> :
+                        <Text>{item.name} {item.createdAt.toString()} {item.updatedAt.toString()}</Text>}
                 </View>
                 <View style={styles.projectListItemButtonContainer}>
-                    <IconButton mode="contained" icon={editAllowed ? "check" : "pencil-outline"} onPress={confirmEdit}/>
-                    <IconButton mode="contained" icon={editAllowed ? "cancel" : "trash-can"} onPress={dismissEdit}/>
+                    <IconButton mode={BUTTON_MODE} icon={editAllowed ? "check" : "pencil-outline"} onPress={confirmEdit}/>
+                    <IconButton mode={BUTTON_MODE} icon={editAllowed ? "cancel" : "trash-can"} onPress={dismissEdit}/>
                 </View>
             </Surface>
         </TouchableOpacity>

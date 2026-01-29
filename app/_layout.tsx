@@ -3,6 +3,10 @@ import {configureFonts, PaperProvider, Text} from "react-native-paper";
 import {useFonts} from "expo-font";
 import {getTheme} from "@/assets/styles";
 import {useColorScheme} from "react-native";
+/**
+ *
+ * @constructor
+ */
 export default function RootLayout() {
 
 

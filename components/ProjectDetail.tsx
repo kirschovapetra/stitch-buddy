@@ -1,22 +1,24 @@
 import React, {useEffect, useState} from 'react';
-import {Animated, useColorScheme} from "react-native";
+import {Animated} from "react-native";
 import CountBlock from "@/components/CountBlock";
-import {Text} from 'react-native-paper';
-import {getTheme, styles} from "@/assets/styles";
+import {styles} from "@/assets/styles";
 import {fetchMetadataItem, getProjectDataAsync, storeDataAsync} from "@/scripts/script";
 import {LoadingScreen} from "@/components/LoadingScreen";
 
+/**
+ *
+ * @param projectId
+ * @constructor
+ */
+export default function ProjectDetail ({projectId}: { projectId:string }) {
 
-
-export default function ProjectDetail ({projectId}: { projectId:any }) {
-
-    const [row, setRow] = useState<number>();
-    const [rowsTotal, setRowsTotal] = useState<number>();
-    const [stitch, setStitch] = useState<number>();
-    const [stitchesTotal, setStitchesTotal] = useState<number>();
+    const [visible, setVisible] = useState<boolean>(false);
+    const [row, setRow] = useState<number>(0);
+    const [rowsTotal, setRowsTotal] = useState<number>(0);
+    const [stitch, setStitch] = useState<number>(0);
+    const [stitchesTotal, setStitchesTotal] = useState<number>(0);
     const [metadataItem, setMetadataItem] = useState<any>();
     const [isLoaded, setIsLoaded] = useState(false);
-    const theme = getTheme(useColorScheme())
 
     useEffect(() => {
         const getProjectData = async () => {
@@ -39,9 +41,8 @@ export default function ProjectDetail ({projectId}: { projectId:any }) {
 
     return (
         <Animated.ScrollView style={{...styles.mainContainer}}>
-            {!isLoaded? <LoadingScreen theme={theme}/> :
+            {!isLoaded? <LoadingScreen/> :
                 <>
-                    <Text variant="titleLarge" style={styles.projectTitle}>Project: {metadataItem.name}</Text>
                     <CountBlock title="Row Counter" count={row} countTotal={rowsTotal} setCount={setRow} setCountTotal={setRowsTotal}/>
                     <CountBlock title="Stitch Counter" count={stitch} countTotal={stitchesTotal} setCount={setStitch} setCountTotal={setStitchesTotal}/>
                 </>

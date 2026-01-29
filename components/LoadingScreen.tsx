@@ -2,8 +2,12 @@ import React from "react";
 import {ActivityIndicator} from "react-native";
 import {styles} from "@/assets/styles";
 
-export function LoadingScreen({theme}:{theme: any}) {
+/**
+ *
+ * @constructor
+ */
+export function LoadingScreen() {
     return (
-        <ActivityIndicator animating={true} size="large" color={theme.colors.primary} style={{...styles.activityIndicator, backgroundColor:theme}}/>
+        <ActivityIndicator animating={true} size="large" style={styles.activityIndicator}/>
     );
 }

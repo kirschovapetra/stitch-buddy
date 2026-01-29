@@ -1,23 +1,26 @@
-import {Button, TextInput, Text} from "react-native-paper";
+import {Button, TextInput, Text, Appbar} from "react-native-paper";
 import React, {useState} from "react";
 import {useRouter} from "expo-router";
-import {useColorScheme, View} from "react-native";
-import {getTheme, styles} from "@/assets/styles";
+import {View} from "react-native";
+import {styles} from "@/assets/styles";
 import {v4 as uuidv4} from 'uuid';
 import {addProject} from "@/scripts/script";
 import {NumericTextInputFormWrapper} from "@/components/NumericTextInputFormWrapper";
 import {Controller, useForm} from "react-hook-form";
-import {ProjectForm} from "@/assets/types";
+import {BUTTON_MODE, ProjectForm, TEXTINPUT_MODE} from "@/assets/types";
 
+/**
+ *
+ * @constructor
+ */
 export function AddProjectView() {
-    const [row, setRow] = useState("");
-    const [rowsTotal, setRowsTotal] = useState("");
-    const [stitch, setStitch] = useState("");
-    const [stitchesTotal, setStitchesTotal] = useState("");
-    const [title, setTitle] = useState("");
+    const [row, setRow] = useState<number>(0);
+    const [rowsTotal, setRowsTotal] = useState<number>(0);
+    const [stitch, setStitch] = useState<number>(0);
+    const [stitchesTotal, setStitchesTotal] = useState<number>(0);
+    const [title, setTitle] = useState<string>("");
     const router = useRouter();
     const {control, handleSubmit, formState: { errors }} = useForm<ProjectForm>()
-    const theme = getTheme(useColorScheme())
     const submitProject = async () => {
         const uuid = uuidv4();
         const timestamp =new Date();
@@ -28,10 +31,10 @@ export function AddProjectView() {
                 updatedAt: timestamp,
             },
             {
-                row: Number(row || "0"),
-                rowsTotal: Number(rowsTotal || "0"),
-                stitch: Number(stitch || "0"),
-                stitchesTotal: Number(stitchesTotal || "0")
+                row: row || 0,
+                rowsTotal: rowsTotal || 0,
+                stitch: stitch || 0,
+                stitchesTotal: stitchesTotal || 0
             });
         router.navigate("/");
     }
@@ -43,13 +46,13 @@ export function AddProjectView() {
                 control={control}
                 rules={{
                     validate: () => {
-                        return title!==null && title.length > 0 ? true : "Project Title is required.";
+                        return title.length > 0 ? true : "Project Title is required.";
                     }
                 }}
                 render={(field) => (
                     <TextInput {...field}
                         value={title}
-                        mode="outlined"
+                        mode={TEXTINPUT_MODE}
                         dense
                         label={<Text>Project title<Text style={{ color: 'red' }}> *</Text></Text>}
                         onChangeText={x => setTitle(x)}
@@ -66,7 +69,11 @@ export function AddProjectView() {
                 label="Row"
                 errorValue={errors.row}
                 control={control}
-                customValidation={Number(row) > Number(rowsTotal) ? "Current Row must be lesser than or equal to Total Row amount" : null}
+                customValidation={(
+                    row !== undefined &&
+                    rowsTotal !== undefined &&
+                    row > rowsTotal) ? "Current Row must be lesser than or equal to Total Row amount" : null
+                }
             />
 
             <NumericTextInputFormWrapper
@@ -85,7 +92,10 @@ export function AddProjectView() {
                 label="Stitch"
                 errorValue={errors.stitch}
                 control={control}
-                customValidation={Number(stitch) > Number(stitchesTotal) ? "Current Stitch must be lesser than or equal to Total Stitch amount" : null}
+                customValidation={(
+                    stitch !== undefined &&
+                    stitchesTotal !== undefined &&
+                    stitch > stitchesTotal) ? "Current Stitch must be lesser than or equal to Total Stitch amount" : null}
             />
 
             <NumericTextInputFormWrapper
@@ -97,12 +107,7 @@ export function AddProjectView() {
                 control={control}/>
 
             <View style={styles.addProjectButtonsContainer}>
-
-                <Button
-                    mode="contained"
-                    onPress={handleSubmit(submitProject)}>
-                    Done
-                </Button>
+                <Button mode={BUTTON_MODE} onPress={handleSubmit(submitProject)}>Done</Button>
             </View>
 
         </View>

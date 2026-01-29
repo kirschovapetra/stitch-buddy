@@ -11,16 +11,15 @@ import {ProjectsListItem} from "@/components/ProjectListItem";
 import {LoadingScreen} from "@/components/LoadingScreen";
 import {SortingMenu} from "@/components/SortingMenu";
 
-export function EmptyScreen() {
-    return (
-        <Text variant="bodyLarge">No project available</Text>
-    );
-}
+/**
+ *
+ * @constructor
+ */
 export function ProjectsList() {
     const [isLoaded, setIsLoaded] = useState(false)
     const [metadata, setMetadata] = useState<ProjectMetadata[]>([])
     const [deletionDialogVisible, setDeletionDialogVisible] = useState(false);
-    const [dialogItem, setDialogItem] = useState<any>(null);
+    const [dialogItem, setDialogItem] = useState<ProjectMetadata>();
     const [sortBy, setSortBy] = useState<any>(SORT_BY.NAME);
     const [sortDirection, setSortDirection] = useState<any>(SORT_DIRECTION.ASC);
     const router = useRouter();
@@ -38,9 +37,9 @@ export function ProjectsList() {
 
     const deleteProject = async () => {
         try {
-            await AsyncStorage.removeItem(`project:${dialogItem.id}`);
+            await AsyncStorage.removeItem(`project:${dialogItem !== undefined ? dialogItem.id : ""}`);
             await AsyncStorage.setItem('metadata',JSON.stringify(
-                metadata.filter((metaItem) => metaItem.id !== dialogItem.id)
+                metadata.filter((metaItem) => dialogItem !== undefined && metaItem.id !== dialogItem.id)
             ));
             setMetadata(await fetchMetadata());
         } catch (e) {
@@ -53,7 +52,7 @@ export function ProjectsList() {
     };
 
     const dismissDeletionDialog = () => {
-        setDialogItem(null)
+        setDialogItem(undefined)
         setDeletionDialogVisible(false)
     };
     const confirmDeletion = () => {
@@ -78,14 +77,21 @@ export function ProjectsList() {
         <>
             <List.Section style={{...styles.mainContainer}}>
                 <View style={styles.projectsListHeaderContainer}>
-                    <Text variant="titleLarge">Projects</Text>
-                    <SortingMenu sortMetadata={sortMetadata} sortBy={sortBy} setSortBy={setSortBy} sortDirection={sortDirection} setSortDirection={setSortDirection}/>
+                    <SortingMenu sortMetadata={sortMetadata}
+                                 sortBy={sortBy}
+                                 setSortBy={setSortBy}
+                                 sortDirection={sortDirection}
+                                 setSortDirection={setSortDirection}/>
                 </View>
-                { !isLoaded? <LoadingScreen theme={theme}/>
-                    : (metadata.length===0 ? <EmptyScreen/>
+                { !isLoaded? <LoadingScreen/>
+                    : (metadata.length===0 ? <Text variant="bodyLarge">No project available</Text>
                             :metadata.map(item => {
                                 return (
-                                    <ProjectsListItem key={item.id} item={item} showDeletionDialog={showDeletionDialog} setMetadata={setMetadata} metadata={metadata}/>
+                                    <ProjectsListItem key={item.id}
+                                                      item={item}
+                                                      showDeletionDialog={showDeletionDialog}
+                                                      setMetadata={setMetadata}
+                                                      metadata={metadata}/>
                                 )})
                     )
                 }

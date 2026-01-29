@@ -2,17 +2,18 @@ import {SafeAreaProvider, SafeAreaView} from "react-native-safe-area-context";
 import React from "react";
 import ProjectDetail from "@/components/ProjectDetail";
 import { useLocalSearchParams } from 'expo-router';
-import {getTheme} from "@/assets/styles";
-import {useColorScheme} from "react-native";
 
+/**
+ *
+ * @constructor
+ */
 export default function ProjectId() {
     const local = useLocalSearchParams();
 
-    const theme = getTheme(useColorScheme())
     return (
-        <SafeAreaProvider style={{backgroundColor:theme.colors.background}}>
+        <SafeAreaProvider>
             <SafeAreaView>
-                <ProjectDetail projectId={local.projectId}/>
+                <ProjectDetail projectId={local.projectId.toString()}/>
             </SafeAreaView>
         </SafeAreaProvider>
     );
