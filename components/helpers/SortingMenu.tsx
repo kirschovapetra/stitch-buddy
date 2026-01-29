@@ -30,7 +30,7 @@ export function SortingMenu({sortMetadata, sortBy, setSortBy, sortDirection, set
               onDismiss={()=>closeMenu(sortBy, sortDirection)}
               anchor={
             <Button contentStyle={{ flexDirection: 'row-reverse'}}
-                    mode="outlined"
+                    mode="elevated"
                     onPress={openMenu}
                     icon={sortDirection===SORT_DIRECTION.ASC ? "sort-ascending" : "sort-descending"}>
                 {sortBy}
@@ -54,7 +54,7 @@ export function SortingMenu({sortMetadata, sortBy, setSortBy, sortDirection, set
                        disabled={sortBy===SORT_BY.UPDATED}/>
 
             <Divider/>
-            <Text variant="bodySmall" style={styles.sortMenuText}>Sort direction</Text>
+            <Text variant="bodySmall" style={styles.sortMenuText}>Sort Direction</Text>
 
             <Menu.Item leadingIcon="sort-ascending"
                        onPress={() => closeMenu(sortBy,SORT_DIRECTION.ASC)}

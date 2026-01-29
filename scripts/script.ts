@@ -1,8 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {Project, ProjectMetadata, SORT_BY, SORT_DIRECTION} from "@/assets/types";
-import {MD3DarkTheme, MD3LightTheme} from "react-native-paper";
-import {ColorSchemeName} from "react-native";
-import {getTheme} from "@/assets/styles";
 
 /**
  *
@@ -11,38 +8,17 @@ import {getTheme} from "@/assets/styles";
  */
 export const addProject = async (metadata:ProjectMetadata, value:Project) => {
     try {
-
         const currentId = `project:${metadata.id}`;
-
-        if (await AsyncStorage.getItem(currentId)!== null) {
-            console.log(`Project with id:${currentId} already exists`)
-            return;
-        }
-        const metadataArray = await fetchMetadata()
-        metadataArray.push(metadata);
-        await AsyncStorage.setItem('metadata',JSON.stringify(metadataArray));
+        await fetchMetadata().then(async (metadataArray)=>{
+            metadataArray.push(metadata);
+            await AsyncStorage.setItem('metadata',JSON.stringify(metadataArray));
+        });
         await AsyncStorage.setItem(currentId,JSON.stringify(value));
     } catch (e) {
         console.error(e);
     }
 };
 
-/**
- *
- */
-export const renameProject = async (metadata:ProjectMetadata[], id: string, name: string) => {
-    try {
-        const found =  await fetchMetadataItem(id);
-        const idx = metadata.indexOf(found);
-        if (idx !== -1) {
-            found.name = name;
-            metadata[idx] = found;
-            await AsyncStorage.setItem('metadata',JSON.stringify(metadata));
-        }
-    } catch (e) {
-        console.error(e);
-    }
-}
 
 /**
  *
@@ -58,6 +34,28 @@ export const fetchMetadata = async () => {
         return [defaultJson];
     }
 };
+
+
+/**
+ *
+ * @param id
+ * @param name
+ */
+export const renameProject = async (id: string, name: string) => {
+    await fetchMetadata()
+        .then(async (metadata) => {
+            const found = metadata.filter((item) => item.id === id)[0]
+            const idx = metadata.indexOf(found)
+            if (idx !== -1) {
+                found.name = name;
+                found.updatedAt = new Date()
+                metadata[idx] = found;
+                console.log(metadata)
+                await AsyncStorage.setItem('metadata', JSON.stringify(metadata));
+            }
+        })
+        .catch((e) => console.error(e));
+}
 
 /**
  *
@@ -78,13 +76,17 @@ export const fetchKey = async (key:string, defaultValue?:string) => {
  * @param id
  */
 export const fetchMetadataItem = async (id:string) => {
-    const currentMetadata =await fetchMetadata();
-    return currentMetadata.filter((item) => item.id === id)[0] || {
+    const defaultMetaItem = {
         id: "",
         name: "",
         createdAt: "",
         updatedAt: "",
-    };
+    }
+    return await fetchMetadata()
+        .then((metadata) => {
+            return metadata.filter((item) => item.id === id)[0]})
+        .catch(() => {return defaultMetaItem});
+
 }
 
 /**
@@ -93,13 +95,13 @@ export const fetchMetadataItem = async (id:string) => {
  */
 export const getProjectDataAsync = async (projectId: string): Promise<Project> => {
     const defaultJson = {row:0,rowsTotal:0,stitch:0,stitchesTotal:0};
-    try {
-        const projectData = await AsyncStorage.getItem(`project:${projectId}`);
-        return projectData == null? defaultJson : JSON.parse(projectData);
-    } catch (e) {
-        console.error(e);
-        return defaultJson;
-    }
+     return await AsyncStorage.getItem(`project:${projectId}`)
+         .then((projectData)=>{
+             return projectData == null? defaultJson : JSON.parse(projectData)})
+         .catch(e=>{
+             console.error(e);
+             return defaultJson;
+    });
 };
 
 /**
@@ -108,20 +110,18 @@ export const getProjectDataAsync = async (projectId: string): Promise<Project> =
  * @param value
  */
 export const storeDataAsync = async (projectId: string, value: Project) => {
-    try {
-        const jsonValue = JSON.stringify(value);
-        await AsyncStorage.setItem(`project:${projectId}`, jsonValue);
-        const metadata =  await fetchMetadata();
-        const found =  await fetchMetadataItem(projectId);
-        const idx = metadata.indexOf(found);
-        if (idx !== -1) {
-            found.updatedAt = new Date();
-            metadata[idx] = found;
-            await AsyncStorage.setItem('metadata',JSON.stringify(metadata));
-        }
-    } catch (e) {
-        console.error(e);
-    }
+    await AsyncStorage.setItem(`project:${projectId}`, JSON.stringify(value));
+    await fetchMetadata()
+        .then(async (metadata) => {
+            const found = metadata.filter((item) => item.id === projectId)[0]
+            const idx = metadata.indexOf(found);
+            if (idx !== -1) {
+                found.updatedAt = new Date();
+                metadata[idx] = found;
+                await AsyncStorage.setItem('metadata',JSON.stringify(metadata));
+            }
+        })
+        .catch((e) => {console.log(e)});
 };
 
 /**

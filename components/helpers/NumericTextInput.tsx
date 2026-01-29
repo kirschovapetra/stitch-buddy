@@ -26,6 +26,7 @@ export function NumericTextInput({value, label, setValue, style, onBlur, errorVa
                render={(props) => <NativeTextInput {...props} keyboardType="numeric"/>}
                error={errorValue !== undefined}
                onBlur={onBlur}
+
         />
     );
 }

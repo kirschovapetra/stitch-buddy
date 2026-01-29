@@ -55,6 +55,11 @@ export type ProjectMetadata = {
     updatedAt: Date;
 };
 
+export type ThemeProps = {
+    title?:string;
+    projectId?:string;
+    setTheme:any
+}
 export enum SORT_DIRECTION {
     ASC = "A to Z",
     DESC = "Z to A",

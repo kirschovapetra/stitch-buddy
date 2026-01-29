@@ -5,10 +5,10 @@ import {styles} from "@/assets/styles";
 import {fetchMetadataItem, getProjectDataAsync, storeDataAsync} from "@/scripts/script";
 import {LoadingScreen} from "@/components/ui/LoadingScreen";
 import {CustomHeader} from "@/components/helpers/CustomHeader";
-import {useRouter} from "expo-router";
 
 /**
  *
+ * @param setTheme
  * @param projectId
  * @constructor
  */
@@ -20,25 +20,27 @@ export default function ProjectDetail ({setTheme, projectId}: { projectId:string
     const [stitchesTotal, setStitchesTotal] = useState<number>(0);
     const [metadataItem, setMetadataItem] = useState<any>();
     const [isLoaded, setIsLoaded] = useState(false);
-    const router = useRouter();
 
     useEffect(() => {
         const getProjectData = async () => {
-            const projectData = await getProjectDataAsync(projectId);
-            setRow(projectData.row);
-            setRowsTotal(projectData.rowsTotal);
-            setStitch(projectData.stitch);
-            setStitchesTotal(projectData.stitchesTotal);
-            setMetadataItem(await fetchMetadataItem(projectId));
-            setIsLoaded(true);
+            await getProjectDataAsync(projectId)
+                .then(async (projectData) => {
+                    setRow(projectData.row);
+                    setRowsTotal(projectData.rowsTotal);
+                    setStitch(projectData.stitch);
+                    setStitchesTotal(projectData.stitchesTotal);
+                });
+
+            await fetchMetadataItem(projectId)
+                .then((item)=>setMetadataItem(item));
         }
-        getProjectData();
+        getProjectData().then(()=>setIsLoaded(true));
     }, [projectId]);
 
 
     useEffect(() => {
         if (!isLoaded) return;
-        storeDataAsync(projectId, {row:row, rowsTotal:rowsTotal, stitch:stitch, stitchesTotal:stitchesTotal});
+        storeDataAsync(projectId, {row:row, rowsTotal:rowsTotal, stitch:stitch, stitchesTotal:stitchesTotal}).then();
     }, [row, rowsTotal, stitch, stitchesTotal, projectId, isLoaded]);
 
     return (
@@ -48,8 +50,17 @@ export default function ProjectDetail ({setTheme, projectId}: { projectId:string
                     <CustomHeader title={`${metadataItem.name}`} setTheme={setTheme}/>
                     <Animated.ScrollView style={{...styles.mainContainer}}>
                         <>
-                            <CountBlock title="Row Counter" count={row} countTotal={rowsTotal} setCount={setRow} setCountTotal={setRowsTotal}/>
-                            <CountBlock title="Stitch Counter" count={stitch} countTotal={stitchesTotal} setCount={setStitch} setCountTotal={setStitchesTotal}/>
+                                <CountBlock title="Row Counter"
+                                            count={row}
+                                            countTotal={rowsTotal}
+                                            setCount={setRow}
+                                            setCountTotal={setRowsTotal}/>
+
+                                <CountBlock title="Stitch Counter"
+                                            count={stitch}
+                                            countTotal={stitchesTotal}
+                                            setCount={setStitch}
+                                            setCountTotal={setStitchesTotal}/>
                         </>
                     </Animated.ScrollView>
                 </>

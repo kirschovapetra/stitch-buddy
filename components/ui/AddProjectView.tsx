@@ -1,4 +1,4 @@
-import {Button, TextInput, Text} from "react-native-paper";
+import {Button, TextInput, Text, Card, useTheme} from "react-native-paper";
 import React, {useState} from "react";
 import {useRouter} from "expo-router";
 import {View} from "react-native";
@@ -8,19 +8,21 @@ import {addProject} from "@/scripts/script";
 import {NumericTextInputFormWrapper} from "@/components/helpers/NumericTextInputFormWrapper";
 import {CustomHeader} from "@/components/helpers/CustomHeader";
 import {Controller, useForm} from "react-hook-form";
-import {BUTTON_MODE, ProjectForm, TEXTINPUT_MODE} from "@/assets/types";
+import {BUTTON_MODE, ProjectForm, TEXTINPUT_MODE, ThemeProps} from "@/assets/types";
 
 /**
  *
+ * @param setTheme
  * @constructor
  */
-export function AddProjectView({setTheme}:{setTheme:any}) {
+export function AddProjectView({setTheme}:ThemeProps) {
     const [row, setRow] = useState<number>(0);
     const [rowsTotal, setRowsTotal] = useState<number>(0);
     const [stitch, setStitch] = useState<number>(0);
     const [stitchesTotal, setStitchesTotal] = useState<number>(0);
     const [title, setTitle] = useState<string>("");
     const router = useRouter();
+    const theme = useTheme();
     const {control, handleSubmit, formState: { errors }} = useForm<ProjectForm>()
     const submitProject = async () => {
         const uuid = uuidV4();
@@ -43,7 +45,8 @@ export function AddProjectView({setTheme}:{setTheme:any}) {
     return (
         <>
             <CustomHeader title={"Add project"} setTheme={setTheme}/>
-            <View style={{...styles.mainContainer}}>
+            <Card mode="elevated" style={{...styles.countBlockContainer,backgroundColor:theme.colors.inverseOnSurface}}>
+                <Card.Content>
             <Controller
                 name="title"
                 control={control}
@@ -112,8 +115,8 @@ export function AddProjectView({setTheme}:{setTheme:any}) {
             <View style={styles.addProjectButtonsContainer}>
                 <Button mode={BUTTON_MODE} onPress={handleSubmit(submitProject)}>Done</Button>
             </View>
-
-        </View>
+                </Card.Content>
+            </Card>
         </>
     );
 }

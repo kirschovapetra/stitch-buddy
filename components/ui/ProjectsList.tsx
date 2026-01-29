@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {Appbar, FAB, List, Text, TextInput} from "react-native-paper";
+import {Appbar, FAB, List, Text, TextInput, useTheme} from "react-native-paper";
 import {View} from "react-native";
 import {useRouter} from "expo-router";
 import {styles} from "@/assets/styles";
 import {DeletionDialog} from "@/components/helpers/DeletionDialog";
 import {compare, fetchKey, fetchMetadata} from "@/scripts/script";
-import {ProjectMetadata, SORT_BY, SORT_DIRECTION, TEXTINPUT_MODE} from "@/assets/types";
+import {ProjectMetadata, SORT_BY, SORT_DIRECTION, ThemeProps} from "@/assets/types";
 import {ProjectsListItem} from "@/components/helpers/ProjectListItem";
 import {LoadingScreen} from "@/components/ui/LoadingScreen";
 import {SortingMenu} from "@/components/helpers/SortingMenu";
@@ -14,9 +14,10 @@ import {ThemeMenu} from "@/components/helpers/ThemeMenu";
 
 /**
  *
+ * @param setTheme
  * @constructor
  */
-export function ProjectsList({setTheme}:{setTheme:any}) {
+export function ProjectsList({setTheme}:ThemeProps) {
     const [isLoaded, setIsLoaded] = useState(false)
     const [metadata, setMetadata] = useState<ProjectMetadata[]>([])
     const [deletionDialogVisible, setDeletionDialogVisible] = useState(false);
@@ -26,6 +27,7 @@ export function ProjectsList({setTheme}:{setTheme:any}) {
     const [searchBarText, setSearchBarText] = useState<string>("");
     const [searchBarVisible, setSearchBarVisible] = useState<boolean>(false);
     const router = useRouter();
+    const theme=useTheme()
 
     useEffect(() => {
         const loadProjects = async () => {
@@ -51,7 +53,7 @@ export function ProjectsList({setTheme}:{setTheme:any}) {
             await AsyncStorage.setItem('metadata',JSON.stringify(
                 metadata.filter((metaItem) => dialogItem !== undefined && metaItem.id !== dialogItem.id)
             ));
-            setMetadata(await fetchMetadata());
+            await fetchMetadata().then((meta)=>setMetadata(meta));
         } catch (e) {
             console.error(e);
         }
@@ -71,7 +73,7 @@ export function ProjectsList({setTheme}:{setTheme:any}) {
     };
 
     const sortMetadata = async (sortByNew:SORT_BY=SORT_BY.NAME, sortDirectionNew:SORT_DIRECTION=SORT_DIRECTION.ASC) => {
-        setMetadata(await fetchMetadata())
+        await fetchMetadata().then((meta)=>setMetadata(meta))
         if (sortByNew !== sortBy) {
             await AsyncStorage.setItem("sortBy", sortByNew)
         }
@@ -101,13 +103,12 @@ export function ProjectsList({setTheme}:{setTheme:any}) {
 
     return (
         <>
-            <Appbar.Header style={styles.projectsListHeaderContainer}>
-                <Appbar.Content title="Projects"/>
+            <Appbar.Header style={{...styles.projectsListHeaderContainer, backgroundColor:theme.colors.background}}>
+                <Appbar.Content title="Projects" titleStyle={styles.projectsListHeaderContainer}/>
                 {
                     searchBarVisible &&
                     <TextInput
                         dense
-                        mode={TEXTINPUT_MODE}
                         value={searchBarText}
                         onChangeText={x=>filterMetadata(x)}
                         onBlur={() => setSearchBarVisible(false)}/>
@@ -137,7 +138,12 @@ export function ProjectsList({setTheme}:{setTheme:any}) {
                 }
             </List.Section>
             <View style={{...styles.mainContainer, ...styles.projectsListButtonsContainer}}>
-                <FAB icon="plus-circle" variant="secondary" onPress={()=>router.navigate(`/add`)} size="medium"/>
+                <FAB icon="plus-circle"
+                     variant="primary"
+                     onPress={()=>router.navigate(`/add`)}
+                     size="medium"
+                     mode="elevated"
+                />
             </View>
 
             <DeletionDialog

@@ -53,16 +53,8 @@ export default function RootLayout() {
         },
     });
 
-    if (!isLoaded) {
-        return (<></>);
-    }
-
-    if (!fontsLoaded) {
-        return (
-            <LoadingScreen/>
-        );
-    }
-
+    if (!isLoaded) return (<></>);
+    if (!fontsLoaded) return (<LoadingScreen/>);
     return (
           <ThemeContext.Provider value={{ setTheme }}>
               <PaperProvider theme={{ ...theme, fonts }}>
