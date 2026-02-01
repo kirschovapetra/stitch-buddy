@@ -29,25 +29,38 @@ export function ThemeMenu({setTheme}:ThemeProps) {
             loadTheme().then(()=>setIsLoaded(true));
         }
     }, [isLoaded]);
-    const openMenu = () => setVisible(true);
 
-    const closeMenu = async (theme:string) => {
+    const openMenu = () => {
+        setVisible(true)
+    };
+
+    const closeMenu = () =>{
+        setVisible(false)
+    }
+
+    const applyTheme = async (theme:string) => {
+        closeMenu()
+
         setSelected(theme);
-        await AsyncStorage.setItem("theme", theme);
-        setVisible(false);
-        if (theme === "default") setTheme(getTheme(defaultScheme))
-        else setTheme(getTheme(theme))
+        await AsyncStorage.setItem("theme", theme).then(()=>{
+                if (theme === THEME.DEFAULT) {
+                    setTheme(getTheme(defaultScheme));
+                } else {
+                    setTheme(getTheme(theme));
+                }
+            }
+        )
     };
 
     return (
         <Menu
             style={styles.menuContent}
             visible={visible}
-            onDismiss={()=>closeMenu(selected)}
+            onDismiss={closeMenu}
             anchor={<Appbar.Action icon="dots-vertical" onPress={openMenu} />}>
-            <Menu.Item onPress={()=>closeMenu(THEME.LIGHT)} title="Light" disabled={selected===THEME.LIGHT}/>
-            <Menu.Item onPress={()=>closeMenu(THEME.DARK)} title="Dark" disabled={selected===THEME.DARK}/>
-            <Menu.Item onPress={()=>closeMenu(THEME.DEFAULT)} title="Default" disabled={selected===THEME.DEFAULT}/>
+            <Menu.Item onPress={()=>applyTheme(THEME.LIGHT)} title="Light" disabled={selected===THEME.LIGHT}/>
+            <Menu.Item onPress={()=>applyTheme(THEME.DARK)} title="Dark" disabled={selected===THEME.DARK}/>
+            <Menu.Item onPress={()=>applyTheme(THEME.DEFAULT)} title="Default" disabled={selected===THEME.DEFAULT}/>
         </Menu>
     );
 }

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Button, Text, Menu, Divider } from 'react-native-paper';
 
 import {styles} from "@/assets/styles";
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import {SORT_BY, SORT_DIRECTION, SortingMenuProps} from "@/assets/types";
 
 /**
@@ -16,18 +16,25 @@ import {SORT_BY, SORT_DIRECTION, SortingMenuProps} from "@/assets/types";
  */
 export function SortingMenu({sortMetadata, sortBy, setSortBy, sortDirection, setSortDirection}: SortingMenuProps) {
     const [visible, setVisible] = useState(false);
-    const openMenu = () => setVisible(true);
-    const closeMenu = (sortByValue:SORT_BY, sortDirectionValue:SORT_DIRECTION) => {
+    const applySort = (sortByValue:SORT_BY, sortDirectionValue:SORT_DIRECTION) => {
         setSortBy(sortByValue)
         setSortDirection(sortDirectionValue)
         sortMetadata(sortByValue, sortDirectionValue)
-        setVisible(false)
+        closeMenu()
     };
+
+    const openMenu = () => {
+        setVisible(true)
+    };
+
+    const closeMenu = () =>{
+        setVisible(false)
+    }
 
     return (
         <Menu contentStyle={styles.menuContent}
               visible={visible}
-              onDismiss={()=>closeMenu(sortBy, sortDirection)}
+              onDismiss={closeMenu}
               anchor={
             <Button contentStyle={{ flexDirection: 'row-reverse'}}
                     mode="elevated"
@@ -39,17 +46,17 @@ export function SortingMenu({sortMetadata, sortBy, setSortBy, sortDirection, set
             <Text variant="bodySmall" style={styles.sortMenuText}>Sort By</Text>
 
             <Menu.Item leadingIcon="format-title"
-                       onPress={() => closeMenu(SORT_BY.NAME, sortDirection)}
+                       onPress={() => applySort(SORT_BY.NAME, sortDirection)}
                        title={SORT_BY.NAME}
                        disabled={sortBy===SORT_BY.NAME}/>
 
             <Menu.Item leadingIcon="creation"
-                       onPress={() => closeMenu(SORT_BY.CREATED, sortDirection)}
+                       onPress={() => applySort(SORT_BY.CREATED, sortDirection)}
                        title={SORT_BY.CREATED}
                        disabled={sortBy===SORT_BY.CREATED}/>
 
             <Menu.Item leadingIcon="update"
-                       onPress={() => closeMenu(SORT_BY.UPDATED, sortDirection)}
+                       onPress={() => applySort(SORT_BY.UPDATED, sortDirection)}
                        title={SORT_BY.UPDATED}
                        disabled={sortBy===SORT_BY.UPDATED}/>
 
@@ -57,11 +64,11 @@ export function SortingMenu({sortMetadata, sortBy, setSortBy, sortDirection, set
             <Text variant="bodySmall" style={styles.sortMenuText}>Sort Direction</Text>
 
             <Menu.Item leadingIcon="sort-ascending"
-                       onPress={() => closeMenu(sortBy,SORT_DIRECTION.ASC)}
+                       onPress={() => applySort(sortBy,SORT_DIRECTION.ASC)}
                        title={SORT_DIRECTION.ASC}
                        disabled={sortDirection===SORT_DIRECTION.ASC}/>
             <Menu.Item leadingIcon="sort-descending"
-                       onPress={() => closeMenu(sortBy,SORT_DIRECTION.DESC)}
+                       onPress={() => applySort(sortBy,SORT_DIRECTION.DESC)}
                        title={SORT_DIRECTION.DESC}
                        disabled={sortDirection===SORT_DIRECTION.DESC}/>
         </Menu>

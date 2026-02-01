@@ -29,7 +29,6 @@ export default function CountBlock({title, count, countTotal, setCount, setCount
     const reset = () => {
         setCountTotal(0);
         setCount(0);
-        alert("Reset successful")
     };
 
     return (

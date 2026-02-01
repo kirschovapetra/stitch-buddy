@@ -20,19 +20,6 @@ export function ProjectsListItem({item, showDeletionDialog, setMetadata}: Projec
     const [tempName, setTempName] = useState("")
     const router = useRouter();
     const theme=useTheme()
-    const confirmEdit = async () => {
-
-        if (!editAllowed) setTempName(item.name || "")
-        else {
-            if (tempName.length === 0) return;
-            await renameProject(item.id, tempName)
-                .then(async ()=>{
-                await fetchMetadata()
-                    .then((m)=>setMetadata(m))
-            })
-        }
-        setEditAllowed(!editAllowed);
-    }
 
     const dismissEdit= () => {
         if (editAllowed) {
@@ -43,6 +30,20 @@ export function ProjectsListItem({item, showDeletionDialog, setMetadata}: Projec
         }
     }
 
+    const confirmEdit = async () => {
+
+        if (!editAllowed) setTempName(item.name || "")
+        else if (tempName === item.name) dismissEdit()
+        else {
+            if (tempName.length === 0) return;
+            await renameProject(item.id, tempName)
+                .then(async ()=>{
+                await fetchMetadata()
+                    .then((m)=>setMetadata(m))
+            })
+        }
+        setEditAllowed(!editAllowed);
+    }
     const allowPress = () => {
         if (!editAllowed)
             router.navigate(`/${item.id}`)

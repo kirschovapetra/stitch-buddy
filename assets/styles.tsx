@@ -11,14 +11,13 @@ export const styles = StyleSheet.create({
         paddingHorizontal:20,
         paddingVertical:5,
         marginVertical: 8,
-        flex:1,
         flexDirection:"row",
         justifyContent:"space-between",
         alignContent:"center",
         borderRadius:10
     },
     projectsListHeaderContainer: {
-        flex:2,
+        flex:1,
         paddingVertical: 5,
         flexDirection:"row",
         justifyContent:"space-between",
@@ -41,8 +40,8 @@ export const styles = StyleSheet.create({
     projectListItemTextContainer: {
         justifyContent:"center",
         textAlign: "center",
-        flex: 1,
-        flexWrap: 'wrap'
+        // flex: 1,
+        // flexWrap: 'wrap'
     },
     projectListItemButtonContainer: {
         justifyContent:"center",
@@ -67,9 +66,10 @@ export const styles = StyleSheet.create({
         marginVertical:8
     },
     projectsListButtonsContainer: {
-        flex:1,
-        justifyContent:"flex-end",
-        flexDirection:"row"
+        // flex:1,
+        justifyContent:"center",
+        marginTop:10
+        // flexDirection:"row"
     },
     addProjectButtonsContainer: {
         flex:1,
@@ -87,9 +87,12 @@ export const styles = StyleSheet.create({
         marginHorizontal:10,
         marginTop:15,
         marginBottom:5,
-        // borderRadius:10,
         paddingVertical:10,
         paddingHorizontal:30
+    },
+    textInputStyle:{
+        width:"50%",
+        marginVertical:10
     }
 });
 

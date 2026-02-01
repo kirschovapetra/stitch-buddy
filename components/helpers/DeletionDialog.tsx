@@ -17,7 +17,8 @@ export function DeletionDialog({visible, confirm, item, dismissDialog}: Deletion
             <Dialog visible={visible} onDismiss={dismissDialog}>
                 <Dialog.Content>
                     <Text variant="bodyMedium" style={styles.projectListItemTextContainer}>
-                        Are you sure you want to delete project: <Text variant="bodyLarge"><b>{item !== undefined? item.name:""}</b></Text>?
+                        Are you sure you want to delete project:
+                        <Text variant="bodyLarge" style={{fontWeight: 'bold'}}>{item !== undefined? item.name:""}</Text>?
                     </Text>
                 </Dialog.Content>
                 <Dialog.Actions>
