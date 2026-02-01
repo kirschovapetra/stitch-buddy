@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Menu,  Appbar} from 'react-native-paper';
+import {Menu, Text, IconButton} from 'react-native-paper';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import {getTheme, styles} from "@/assets/styles";
@@ -31,16 +31,15 @@ export function ThemeMenu({setTheme}:ThemeProps) {
     }, [isLoaded]);
 
     const openMenu = () => {
-        setVisible(true)
+        if (!visible) setVisible(true);
     };
 
-    const closeMenu = () =>{
-        setVisible(false)
-    }
+    const closeMenu = () => {
+        if (visible) setVisible(false)
+    };
 
     const applyTheme = async (theme:string) => {
         closeMenu()
-
         setSelected(theme);
         await AsyncStorage.setItem("theme", theme).then(()=>{
                 if (theme === THEME.DEFAULT) {
@@ -53,11 +52,12 @@ export function ThemeMenu({setTheme}:ThemeProps) {
     };
 
     return (
-        <Menu
-            style={styles.menuContent}
-            visible={visible}
-            onDismiss={closeMenu}
-            anchor={<Appbar.Action icon="dots-vertical" onPress={openMenu} />}>
+        <Menu key={""+visible}
+              anchorPosition="bottom"
+              visible={visible}
+              onDismiss={closeMenu}
+              anchor={<IconButton icon="dots-vertical" onPress={openMenu}/>}>
+            <Text variant="bodySmall" style={styles.sortMenuText}>Theme</Text>
             <Menu.Item onPress={()=>applyTheme(THEME.LIGHT)} title="Light" disabled={selected===THEME.LIGHT}/>
             <Menu.Item onPress={()=>applyTheme(THEME.DARK)} title="Dark" disabled={selected===THEME.DARK}/>
             <Menu.Item onPress={()=>applyTheme(THEME.DEFAULT)} title="Default" disabled={selected===THEME.DEFAULT}/>
