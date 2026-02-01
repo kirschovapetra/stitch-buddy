@@ -50,7 +50,6 @@ export const renameProject = async (id: string, name: string) => {
                 found.name = name;
                 found.updatedAt = new Date()
                 metadata[idx] = found;
-                console.log(metadata)
                 await AsyncStorage.setItem('metadata', JSON.stringify(metadata));
             }
         })

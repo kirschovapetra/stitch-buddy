@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {Appbar, FAB, List, Text, TextInput, useTheme} from "react-native-paper";
+import {FAB, IconButton, List, Text, TextInput, useTheme} from "react-native-paper";
 import {View} from "react-native";
-import {useRouter} from "expo-router";
+import {Stack, useRouter} from "expo-router";
 import {styles} from "@/assets/styles";
 import {DeletionDialog} from "@/components/helpers/DeletionDialog";
 import {compare, fetchKey, fetchMetadata} from "@/scripts/script";
@@ -11,6 +11,7 @@ import {ProjectsListItem} from "@/components/helpers/ProjectListItem";
 import {LoadingScreen} from "@/components/ui/LoadingScreen";
 import {SortingMenu} from "@/components/helpers/SortingMenu";
 import {ThemeMenu} from "@/components/helpers/ThemeMenu";
+import {CustomHeader} from "@/components/helpers/CustomHeader";
 
 /**
  *
@@ -27,7 +28,6 @@ export function ProjectsList({setTheme}:ThemeProps) {
     const [searchBarText, setSearchBarText] = useState<string>("");
     const [searchBarVisible, setSearchBarVisible] = useState<boolean>(false);
     const router = useRouter();
-    const theme=useTheme()
 
     useEffect(() => {
         const loadProjects = async () => {
@@ -59,6 +59,7 @@ export function ProjectsList({setTheme}:ThemeProps) {
         }
     };
     const showDeletionDialog = (item:ProjectMetadata) => {
+
         setDialogItem(item)
         setDeletionDialogVisible(true)
     };
@@ -100,57 +101,60 @@ export function ProjectsList({setTheme}:ThemeProps) {
             })
     }
 
-
     return (
         <>
-            <Appbar.Header style={{...styles.projectsListHeaderContainer, backgroundColor:theme.colors.background}}>
-                <Appbar.Content title="Projects" titleStyle={styles.projectsListHeaderContainer}/>
-                {
-                    searchBarVisible &&
-                    <TextInput
-                        dense
-                        value={searchBarText}
-                        onChangeText={x=>filterMetadata(x)}
-                        onBlur={() => setSearchBarVisible(false)}/>
-                }
-                <Appbar.Action icon="magnify" onPress={() => setSearchBarVisible(!searchBarVisible)}/>
-                <ThemeMenu setTheme={setTheme}/>
-            </Appbar.Header>
-            <List.Section style={styles.mainContainer}>
-                <View style={styles.projectsListHeaderContainer}>
-                    <SortingMenu sortMetadata={sortMetadata}
-                                 sortBy={sortBy}
-                                 setSortBy={setSortBy}
-                                 sortDirection={sortDirection}
-                                 setSortDirection={setSortDirection}/>
-                </View>
-                { !isLoaded? <LoadingScreen/>
-                    : (metadata.length===0 ? <Text variant="bodyLarge">No project available</Text>
-                            :metadata.map(item => {
-                                return (
-                                    <ProjectsListItem key={item.id}
-                                                      item={item}
-                                                      showDeletionDialog={showDeletionDialog}
-                                                      setMetadata={setMetadata}
-                                                      metadata={metadata}/>
-                                )})
-                    )
-                }
-            </List.Section>
-            <View style={{...styles.mainContainer, ...styles.projectsListButtonsContainer}}>
-                <FAB icon="plus-circle"
-                     variant="primary"
-                     onPress={()=>router.navigate(`/add`)}
-                     size="medium"
-                     mode="elevated"
-                />
-            </View>
-
             <DeletionDialog
                 visible={deletionDialogVisible}
                 item={dialogItem}
                 confirm={confirmDeletion}
                 dismissDialog={dismissDeletionDialog}/>
-        </>
+
+            <CustomHeader title={"Projects"}
+                          setTheme={setTheme}
+                          customComponents={(
+                              <>
+                                  {searchBarVisible &&
+                                          <TextInput dense value={searchBarText}
+                                                     onChangeText={x=>filterMetadata(x)}
+                                                     onBlur={() => setSearchBarVisible(false)}
+                                                     style={styles.textInputStyle}
+                                          />
+                                      }
+                                  <IconButton icon="magnify" onPress={() => setSearchBarVisible(!searchBarVisible)}/>
+                              </>
+                          )}
+            />
+            <List.Section style={styles.mainContainer}>
+                <View style={{alignSelf:"flex-start"}} >
+                    <SortingMenu sortMetadata={sortMetadata}
+                                 sortBy={sortBy}
+                                 setSortBy={setSortBy}
+                                 sortDirection={sortDirection}
+                                 setSortDirection={setSortDirection}
+                                />
+                </View>
+                { !isLoaded? <LoadingScreen/>
+                    : (metadata.length===0 ? <Text variant="bodyLarge" style={{marginTop: 10}}>No project available</Text>
+                            :metadata.map(item => {
+                                return (
+                                    <ProjectsListItem key={item.id}
+                                                      item={item}
+                                                      showDeletionDialog={showDeletionDialog}
+                                                      setMetadata={setMetadata}/>
+                                )})
+                    )
+                }
+            </List.Section>
+
+            <View style={styles.mainContainer}>
+                <FAB icon="plus-circle"
+                     variant="primary"
+                     onPress={()=>router.navigate(`/add`)}
+                     size="medium"
+                     mode="elevated"
+                    style={{alignSelf:"flex-end"}}
+                />
+            </View>
+            </>
     );
 }

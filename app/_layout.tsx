@@ -1,12 +1,13 @@
 import { Stack } from "expo-router";
-import {configureFonts, PaperProvider, Text, } from "react-native-paper";
+import {configureFonts, PaperProvider} from "react-native-paper";
 import {useFonts} from "expo-font";
-import {useColorScheme} from "react-native";
+import {useColorScheme, StatusBar} from "react-native";
 import {useEffect, useState} from "react";
 import {getTheme} from "@/assets/styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ThemeContext } from "@/components/helpers/ThemeContext";
 import {LoadingScreen} from "@/components/ui/LoadingScreen";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 /**
  *
  * @constructor
@@ -57,9 +58,9 @@ export default function RootLayout() {
     if (!fontsLoaded) return (<LoadingScreen/>);
     return (
           <ThemeContext.Provider value={{ setTheme }}>
-              <PaperProvider theme={{ ...theme, fonts }}>
-                  <Stack screenOptions={{ headerShown: false }} />
-              </PaperProvider>
+                  <PaperProvider theme={{ ...theme, fonts }}>
+                      <Stack initialRouteName="index" />
+                  </PaperProvider>
           </ThemeContext.Provider>
   );
 }

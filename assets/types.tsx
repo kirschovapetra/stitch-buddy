@@ -45,7 +45,6 @@ export interface NumericTextInputFormWrapperProps extends NumericTextInputProps 
 export type ProjectListItemProps = {
     item:ProjectMetadata,
     showDeletionDialog:Function,
-    metadata:ProjectMetadata[],
     setMetadata:React.Dispatch<React.SetStateAction<ProjectMetadata[]>>
 }
 export type ProjectMetadata = {
@@ -58,7 +57,8 @@ export type ProjectMetadata = {
 export type ThemeProps = {
     title?:string;
     projectId?:string;
-    setTheme:any
+    setTheme:any,
+    customComponents?:any,
 }
 export enum SORT_DIRECTION {
     ASC = "A to Z",

@@ -3,6 +3,7 @@ import React, {useState} from "react";
 import {useRouter} from "expo-router";
 import {View} from "react-native";
 import {styles} from "@/assets/styles";
+import 'react-native-get-random-values';
 import {v4 as uuidV4} from 'uuid';
 import {addProject} from "@/scripts/script";
 import {NumericTextInputFormWrapper} from "@/components/helpers/NumericTextInputFormWrapper";
@@ -112,11 +113,13 @@ export function AddProjectView({setTheme}:ThemeProps) {
                 errorValue={errors.stitchesTotal}
                 control={control}/>
 
-            <View style={styles.addProjectButtonsContainer}>
-                <Button mode={BUTTON_MODE} onPress={handleSubmit(submitProject)}>Done</Button>
-            </View>
+                    <View style={styles.projectsListButtonsContainer}>
+                        <Button mode={BUTTON_MODE} onPress={handleSubmit(submitProject)}>Done</Button>
+                    </View>
                 </Card.Content>
             </Card>
+
+
         </>
     );
 }
