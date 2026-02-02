@@ -16,7 +16,8 @@
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/adaptive-icon.png"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.kirschovapetra.stitchbuddy"
     },
     "web": {
       "output": "static",

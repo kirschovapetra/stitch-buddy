@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Button, Text, Menu, Divider } from 'react-native-paper';
 
 import {styles} from "@/assets/styles";
-import {useState, useEffect} from "react";
+import {useState} from "react";
 import {SORT_BY, SORT_DIRECTION, SortingMenuProps} from "@/assets/types";
 
 /**
@@ -24,15 +24,16 @@ export function SortingMenu({sortMetadata, sortBy, setSortBy, sortDirection, set
     };
 
     const openMenu = () => {
-        setVisible(true)
+        if (!visible) setVisible(true)
     };
 
-    const closeMenu = () =>{
-        setVisible(false)
-    }
+    const closeMenu = () => {
+        if (visible) setVisible(false)
+    };
 
     return (
-        <Menu contentStyle={styles.menuContent}
+        <Menu key={""+visible}
+              anchorPosition="bottom"
               visible={visible}
               onDismiss={closeMenu}
               anchor={
