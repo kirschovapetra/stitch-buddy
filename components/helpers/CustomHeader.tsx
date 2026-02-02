@@ -22,7 +22,7 @@ export function CustomHeader({title, setTheme, backAllowed, customComponents}:Th
             headerStyle: {backgroundColor:theme.colors.surface},
             headerTintColor: `${theme.colors.onSurface}`,
             statusBarStyle: `${theme.dark?"light":"dark"}`,
-            headerBackVisible: backAllowed || false,
+            headerBackVisible: backAllowed || true,
             headerRight: () => (
                 <>
                     {customComponents}
