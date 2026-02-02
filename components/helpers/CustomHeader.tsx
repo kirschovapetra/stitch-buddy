@@ -8,10 +8,11 @@ import {ThemeMenu} from "@/components/helpers/ThemeMenu";
  *
  * @param title
  * @param setTheme
+ * @param backAllowed
  * @param customComponents
  * @constructor
  */
-export function CustomHeader({title, setTheme, customComponents}:ThemeProps) {
+export function CustomHeader({title, setTheme, backAllowed, customComponents}:ThemeProps) {
     const theme = useTheme();
 
     return (
@@ -21,6 +22,7 @@ export function CustomHeader({title, setTheme, customComponents}:ThemeProps) {
             headerStyle: {backgroundColor:theme.colors.surface},
             headerTintColor: `${theme.colors.onSurface}`,
             statusBarStyle: `${theme.dark?"light":"dark"}`,
+            headerBackVisible: backAllowed || false,
             headerRight: () => (
                 <>
                     {customComponents}

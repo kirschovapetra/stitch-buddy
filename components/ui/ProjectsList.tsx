@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {FAB, IconButton, List, Text, TextInput, useTheme} from "react-native-paper";
+import {FAB, IconButton, List, Text, TextInput} from "react-native-paper";
 import {View} from "react-native";
-import {Stack, useRouter} from "expo-router";
+import {useRouter} from "expo-router";
 import {styles} from "@/assets/styles";
 import {DeletionDialog} from "@/components/helpers/DeletionDialog";
 import {compare, fetchKey, fetchMetadata} from "@/scripts/script";
@@ -10,7 +10,6 @@ import {ProjectMetadata, SORT_BY, SORT_DIRECTION, ThemeProps} from "@/assets/typ
 import {ProjectsListItem} from "@/components/helpers/ProjectListItem";
 import {LoadingScreen} from "@/components/ui/LoadingScreen";
 import {SortingMenu} from "@/components/helpers/SortingMenu";
-import {ThemeMenu} from "@/components/helpers/ThemeMenu";
 import {CustomHeader} from "@/components/helpers/CustomHeader";
 
 /**
@@ -111,6 +110,7 @@ export function ProjectsList({setTheme}:ThemeProps) {
 
             <CustomHeader title={"Projects"}
                           setTheme={setTheme}
+                          backAllowed={false}
                           customComponents={(
                               <>
                                   {searchBarVisible &&

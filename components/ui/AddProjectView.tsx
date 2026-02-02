@@ -40,7 +40,7 @@ export function AddProjectView({setTheme}:ThemeProps) {
                 stitch: stitch || 0,
                 stitchesTotal: stitchesTotal || 0
             });
-        router.navigate("/");
+        router.dismissTo("/");
     }
 
     return (
