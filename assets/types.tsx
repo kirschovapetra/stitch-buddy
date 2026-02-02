@@ -58,6 +58,7 @@ export type ThemeProps = {
     title?:string;
     projectId?:string;
     setTheme:any,
+    backAllowed?:boolean,
     customComponents?:any,
 }
 export enum SORT_DIRECTION {

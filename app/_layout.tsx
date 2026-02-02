@@ -1,13 +1,12 @@
 import { Stack } from "expo-router";
 import {configureFonts, PaperProvider} from "react-native-paper";
 import {useFonts} from "expo-font";
-import {useColorScheme, StatusBar} from "react-native";
+import {useColorScheme} from "react-native";
 import {useEffect, useState} from "react";
 import {getTheme} from "@/assets/styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ThemeContext } from "@/components/helpers/ThemeContext";
 import {LoadingScreen} from "@/components/ui/LoadingScreen";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
 /**
  *
  * @constructor
