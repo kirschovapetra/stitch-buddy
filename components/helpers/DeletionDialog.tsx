@@ -4,11 +4,12 @@ import {styles} from "@/assets/styles";
 import {DeletionDialogProps} from "@/assets/types";
 
 /**
+ * Confirmation dialog for deleting a project.
  *
- * @param visible
- * @param confirm
- * @param item
- * @param dismissDialog
+ * @param visible Dialog visibility
+ * @param confirm Confirm deletion callback
+ * @param item Project metadata
+ * @param dismissDialog Close dialog callback
  * @constructor
  */
 export function DeletionDialog({visible, confirm, item, dismissDialog}: DeletionDialogProps) {

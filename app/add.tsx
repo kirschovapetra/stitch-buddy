@@ -5,6 +5,9 @@ import {useTheme} from "react-native-paper";
 import {useThemeContext} from "@/components/helpers/ThemeContext";
 
 /**
+ * Screen for creating a new project.
+ * Handles project form input, validation,
+ * and saving.
  *
  * @constructor
  */

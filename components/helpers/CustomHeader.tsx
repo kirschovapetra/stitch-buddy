@@ -5,11 +5,12 @@ import {useTheme} from "react-native-paper";
 import {ThemeMenu} from "@/components/helpers/ThemeMenu";
 
 /**
+ * Configures the screen header with title, theme menu, and optional actions.
  *
- * @param title
- * @param setTheme
- * @param backAllowed
- * @param customComponents
+ * @param title Header title
+ * @param setTheme Theme toggle handler
+ * @param backAllowed Enable back navigation
+ * @param customComponents Optional header components
  * @constructor
  */
 export function CustomHeader({title, setTheme, backAllowed, customComponents}:ThemeProps) {

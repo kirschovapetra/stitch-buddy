@@ -5,15 +5,16 @@ import {NumericTextInput} from "@/components/helpers/NumericTextInput";
 import {NumericTextInputFormWrapperProps} from "@/assets/types";
 
 /**
+ * React Hook Form wrapper for numeric inputs with validation.
  *
- * @param control
- * @param name
- * @param value
- * @param label
- * @param setValue
- * @param errorValue
- * @param style
- * @param customValidation
+ * @param control Form control
+ * @param name Field name
+ * @param value Field value
+ * @param label Field label
+ * @param setValue Value setter
+ * @param errorValue Validation error
+ * @param style Custom styles
+ * @param customValidation Optional custom validation message
  * @constructor
  */
 export function NumericTextInputFormWrapper({control, name, value, label, setValue, errorValue, style, customValidation}

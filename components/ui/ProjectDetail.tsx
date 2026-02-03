@@ -7,9 +7,11 @@ import {LoadingScreen} from "@/components/ui/LoadingScreen";
 import {CustomHeader} from "@/components/helpers/CustomHeader";
 
 /**
+ * Project detail screen.
+ * Displays and updates row and stitch counters for a single project.
  *
- * @param setTheme
- * @param projectId
+ * @param setTheme Theme toggle handler
+ * @param projectId Project ID
  * @constructor
  */
 export default function ProjectDetail ({setTheme, projectId}: { projectId:string, setTheme:any }) {
@@ -21,6 +23,9 @@ export default function ProjectDetail ({setTheme, projectId}: { projectId:string
     const [metadataItem, setMetadataItem] = useState<any>();
     const [isLoaded, setIsLoaded] = useState(false);
 
+    /**
+     * Loads project data and metadata on mount.
+     */
     useEffect(() => {
         const getProjectData = async () => {
             await getProjectDataAsync(projectId)
@@ -38,6 +43,9 @@ export default function ProjectDetail ({setTheme, projectId}: { projectId:string
     }, [projectId]);
 
 
+    /**
+     * Persists counter changes after initial load.
+     */
     useEffect(() => {
         if (!isLoaded) return;
         storeDataAsync(projectId, {row:row, rowsTotal:rowsTotal, stitch:stitch, stitchesTotal:stitchesTotal}).then();
