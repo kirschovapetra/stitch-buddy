@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {FAB, IconButton, List, Text, TextInput} from "react-native-paper";
 import {View} from "react-native";
-import {useRouter} from "expo-router";
+import {useFocusEffect, useRouter} from "expo-router";
 import {styles} from "@/assets/styles";
 import {DeletionDialog} from "@/components/helpers/DeletionDialog";
 import {compare, fetchKey, fetchMetadata} from "@/scripts/script";
@@ -34,22 +34,24 @@ export function ProjectsList({setTheme}:ThemeProps) {
     /**
      * Loads projects and applies saved sort settings.
      */
-    useEffect(() => {
-        const loadProjects = async () => {
-            await fetchKey("sortBy", SORT_BY.NAME).then(async (by)=> {
-                setSortBy(by)
-                await fetchKey("sortDirection", SORT_DIRECTION.ASC).then(async (direction)=> {
-                    setSortDirection(direction)
-                    await fetchMetadata().then((meta) => {
-                        setMetadata(meta.sort(compare(by,direction)))
+    useFocusEffect(
+        React.useCallback(() => {
+            const loadProjects = async () => {
+                await fetchKey("sortBy", SORT_BY.NAME).then(async (by) => {
+                    setSortBy(by)
+                    await fetchKey("sortDirection", SORT_DIRECTION.ASC).then(async (direction) => {
+                        setSortDirection(direction)
+                        await fetchMetadata().then((meta) => {
+                            setMetadata(meta.sort(compare(by, direction)))
+                        })
                     })
                 })
-            })
-        };
-        if (!isLoaded) {
-            loadProjects().then(()=>setIsLoaded(true));
-        }
-    }, [isLoaded]);
+                if (!isLoaded) setIsLoaded(true);
+            };
+
+            loadProjects().then(()=>{});
+        },[isLoaded])
+    );
 
     /**
      * Deletes the selected project and updates metadata.
