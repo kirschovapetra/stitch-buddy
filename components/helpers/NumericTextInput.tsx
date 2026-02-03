@@ -4,13 +4,14 @@ import { TextInput as NativeTextInput } from "react-native";
 import {NumericTextInputProps, TEXTINPUT_MODE} from "@/assets/types";
 
 /**
+ * Numeric-only text input with optional validation state.
  *
- * @param value
- * @param label
- * @param setValue
- * @param style
- * @param onBlur
- * @param errorValue
+ * @param value Input value
+ * @param label Input label
+ * @param setValue Value setter
+ * @param style Custom styles
+ * @param onBlur Blur handler
+ * @param errorValue Validation error
  * @constructor
  */
 export function NumericTextInput({value, label, setValue, style, onBlur, errorValue}:NumericTextInputProps) {

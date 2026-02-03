@@ -2,9 +2,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import {Project, ProjectMetadata, SORT_BY, SORT_DIRECTION} from "@/assets/types";
 
 /**
+ * Stores a new project and adds its metadata to storage.
  *
- * @param metadata
- * @param value
+ * @param metadata Project metadata entry
+ * @param value Full project data
  */
 export const addProject = async (metadata:ProjectMetadata, value:Project) => {
     try {
@@ -19,9 +20,10 @@ export const addProject = async (metadata:ProjectMetadata, value:Project) => {
     }
 };
 
-
 /**
+ * Fetches all stored project metadata.
  *
+ * @returns Array of project metadata
  */
 export const fetchMetadata = async () => {
     const defaultJson = { id: "", name: "", createdAt: "", updatedAt: ""};
@@ -37,9 +39,10 @@ export const fetchMetadata = async () => {
 
 
 /**
+ * Renames an existing project and updates its timestamp.
  *
- * @param id
- * @param name
+ * @param id Project ID
+ * @param name New project name
  */
 export const renameProject = async (id: string, name: string) => {
     await fetchMetadata()
@@ -57,9 +60,10 @@ export const renameProject = async (id: string, name: string) => {
 }
 
 /**
+ * Fetches a raw value from AsyncStorage.
  *
- * @param key
- * @param defaultValue
+ * @param key Storage key
+ * @param defaultValue Value returned if key is missing
  */
 export const fetchKey = async (key:string, defaultValue?:string) => {
     try {
@@ -71,8 +75,9 @@ export const fetchKey = async (key:string, defaultValue?:string) => {
 };
 
 /**
+ * Fetches metadata for a single project.
  *
- * @param id
+ * @param id Project ID
  */
 export const fetchMetadataItem = async (id:string) => {
     const defaultMetaItem = {
@@ -89,8 +94,9 @@ export const fetchMetadataItem = async (id:string) => {
 }
 
 /**
+ * Loads stored project data.
  *
- * @param projectId
+ * @param projectId Project ID
  */
 export const getProjectDataAsync = async (projectId: string): Promise<Project> => {
     const defaultJson = {row:0,rowsTotal:0,stitch:0,stitchesTotal:0};
@@ -104,9 +110,10 @@ export const getProjectDataAsync = async (projectId: string): Promise<Project> =
 };
 
 /**
+ * Persists project data and updates metadata timestamp.
  *
- * @param projectId
- * @param value
+ * @param projectId Project ID
+ * @param value Project data
  */
 export const storeDataAsync = async (projectId: string, value: Project) => {
     await AsyncStorage.setItem(`project:${projectId}`, JSON.stringify(value));
@@ -124,9 +131,10 @@ export const storeDataAsync = async (projectId: string, value: Project) => {
 };
 
 /**
+ * Comparator factory for sorting project metadata.
  *
- * @param sortByProperty
- * @param direction
+ * @param sortByProperty Property to sort by
+ * @param direction Sort direction
  */
 export const compare = (sortByProperty?:string|SORT_BY, direction?:string|SORT_DIRECTION) => {
         const sortOrder = direction === SORT_DIRECTION.ASC? 1 : -1;

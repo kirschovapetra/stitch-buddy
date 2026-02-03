@@ -10,10 +10,14 @@ import {NumericTextInputFormWrapper} from "@/components/helpers/NumericTextInput
 import {CustomHeader} from "@/components/helpers/CustomHeader";
 import {Controller, useForm} from "react-hook-form";
 import {BUTTON_MODE, ProjectForm, TEXTINPUT_MODE, ThemeProps} from "@/assets/types";
+import * as Haptics from "expo-haptics";
 
 /**
+ * Screen for creating a new project.
+ * Collects project title and initial row/stitch counters,
+ * then persists the project and navigates back to the list.
  *
- * @param setTheme
+ * @param setTheme Theme toggle handler
  * @constructor
  */
 export function AddProjectView({setTheme}:ThemeProps) {
@@ -25,6 +29,11 @@ export function AddProjectView({setTheme}:ThemeProps) {
     const router = useRouter();
     const theme = useTheme();
     const {control, handleSubmit, formState: { errors }} = useForm<ProjectForm>()
+
+    /**
+     * Generates a new project ID, saves project data and metadata,
+     * then navigates back to the projects list.
+     */
     const submitProject = async () => {
         const uuid = uuidV4();
         const timestamp =new Date();
@@ -40,6 +49,7 @@ export function AddProjectView({setTheme}:ThemeProps) {
                 stitch: stitch || 0,
                 stitchesTotal: stitchesTotal || 0
             });
+        Haptics.selectionAsync().then(() => {})
         router.dismissTo("/");
     }
 

@@ -11,10 +11,13 @@ import {ProjectsListItem} from "@/components/helpers/ProjectListItem";
 import {LoadingScreen} from "@/components/ui/LoadingScreen";
 import {SortingMenu} from "@/components/helpers/SortingMenu";
 import {CustomHeader} from "@/components/helpers/CustomHeader";
+import * as Haptics from "expo-haptics";
 
 /**
+ * Projects list screen.
+ * Displays, sorts, filters, and deletes stored projects.
  *
- * @param setTheme
+ * @param setTheme Theme toggle handler
  * @constructor
  */
 export function ProjectsList({setTheme}:ThemeProps) {
@@ -28,6 +31,9 @@ export function ProjectsList({setTheme}:ThemeProps) {
     const [searchBarVisible, setSearchBarVisible] = useState<boolean>(false);
     const router = useRouter();
 
+    /**
+     * Loads projects and applies saved sort settings.
+     */
     useEffect(() => {
         const loadProjects = async () => {
             await fetchKey("sortBy", SORT_BY.NAME).then(async (by)=> {
@@ -45,6 +51,9 @@ export function ProjectsList({setTheme}:ThemeProps) {
         }
     }, [isLoaded]);
 
+    /**
+     * Deletes the selected project and updates metadata.
+     */
     const deleteProject = async () => {
         try {
             await AsyncStorage.removeItem(`project:${dialogItem !== undefined ? dialogItem.id : ""}`);
@@ -57,21 +66,44 @@ export function ProjectsList({setTheme}:ThemeProps) {
             console.error(e);
         }
     };
-    const showDeletionDialog = (item:ProjectMetadata) => {
 
+    /**
+     * Opens the deletion confirmation dialog.
+     *
+     * @param item Project metadata
+     */
+    const showDeletionDialog = (item:ProjectMetadata) => {
         setDialogItem(item)
         setDeletionDialogVisible(true)
     };
 
+    /**
+     * Closes the deletion dialog without deleting.
+     */
     const dismissDeletionDialog = () => {
-        setDialogItem(undefined)
-        setDeletionDialogVisible(false)
-    };
-    const confirmDeletion = () => {
-        deleteProject().then(() => {});
-        dismissDeletionDialog()
+        Haptics.selectionAsync().then(() => {
+            setDialogItem(undefined)
+            setDeletionDialogVisible(false)
+        })
     };
 
+    /**
+     * Confirms project deletion.
+     */
+    const confirmDeletion = () => {
+        Haptics.selectionAsync().then(() =>
+            deleteProject().then(() =>
+                dismissDeletionDialog()
+            )
+        )
+    };
+
+    /**
+     * Sorts project metadata and persists sort preferences.
+     *
+     * @param sortByNew Sort field
+     * @param sortDirectionNew Sort direction
+     */
     const sortMetadata = async (sortByNew:SORT_BY=SORT_BY.NAME, sortDirectionNew:SORT_DIRECTION=SORT_DIRECTION.ASC) => {
         await fetchMetadata().then((meta)=>setMetadata(meta))
         if (sortByNew !== sortBy) {
@@ -83,7 +115,11 @@ export function ProjectsList({setTheme}:ThemeProps) {
         setMetadata(metadata.sort(compare(sortByNew,sortDirectionNew)))
     }
 
-
+    /**
+     * Filters projects by name and reapplies sorting.
+     *
+     * @param searchText Search query
+     */
     const filterMetadata = async (searchText:string) => {
         setSearchBarText(searchText)
         if (searchText.length === 0) {
@@ -149,7 +185,10 @@ export function ProjectsList({setTheme}:ThemeProps) {
             <View style={styles.mainContainer}>
                 <FAB icon="plus-circle"
                      variant="primary"
-                     onPress={()=>router.navigate(`/add`)}
+                     onPress={()=> {
+                         Haptics.selectionAsync().then(() => {})
+                         router.navigate(`/add`)
+                     }}
                      size="medium"
                      mode="elevated"
                     style={{alignSelf:"flex-end"}}

@@ -2,6 +2,7 @@ import React from "react";
 import {ActivityIndicator, View} from "react-native";
 import {useTheme} from "react-native-paper";
 /**
+ * Loading indicator shown during async operations.
  *
  * @constructor
  */

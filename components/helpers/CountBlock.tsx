@@ -1,5 +1,5 @@
 import {View} from "react-native";
-import {IconButton, Button, Text, ProgressBar, useTheme, Card} from 'react-native-paper';
+import {IconButton, Button, ProgressBar, useTheme, Card} from 'react-native-paper';
 import {styles} from "@/assets/styles";
 import React, {useState} from "react";
 import * as Haptics from 'expo-haptics';
@@ -7,28 +7,35 @@ import {NumericTextInput} from "@/components/helpers/NumericTextInput";
 import {BUTTON_MODE, CountBlockProps} from "@/assets/types";
 
 /**
+ * Counter block with progress bar and increment/decrement controls.
  *
- * @param title
- * @param count
- * @param countTotal
- * @param setCount
- * @param setCountTotal
+ * @param title Block title
+ * @param count Current value
+ * @param countTotal Max value
+ * @param setCount Setter for count
+ * @param setCountTotal Setter for total
  * @constructor
  */
 export default function CountBlock({title, count, countTotal, setCount, setCountTotal}: CountBlockProps) {
     const [progressBarKey, setProgressBarKey] = useState<number>(0);
     const theme = useTheme()
     const increment = () => {
-        if (count < (countTotal || 0)) setCount(count + 1);
-        Haptics.selectionAsync().then(() => {})
+        Haptics.selectionAsync().then(() => {
+            if (count < (countTotal || 0)) setCount(count + 1);
+        })
     };
     const decrement = () => {
-        if (count > 0) setCount(count - 1);
-        Haptics.selectionAsync().then(() => {})
+        Haptics.selectionAsync().then(() => {
+            if (count > 0) setCount(count - 1);
+        })
     };
     const reset = () => {
-        setCountTotal(0);
-        setCount(0);
+        Haptics.notificationAsync(
+            Haptics.NotificationFeedbackType.Success
+        ).then(()=>{
+            setCountTotal(0);
+            setCount(0);
+        })
     };
 
     return (

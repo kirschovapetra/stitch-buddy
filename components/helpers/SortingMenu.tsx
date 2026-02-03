@@ -6,12 +6,13 @@ import {useState} from "react";
 import {SORT_BY, SORT_DIRECTION, SortingMenuProps} from "@/assets/types";
 
 /**
+ * Menu for sorting projects by field and direction.
  *
- * @param sortMetadata
- * @param sortBy
- * @param setSortBy
- * @param sortDirection
- * @param setSortDirection
+ * @param sortMetadata Apply sorting callback
+ * @param sortBy Current sort field
+ * @param setSortBy Sort field setter
+ * @param sortDirection Current sort direction
+ * @param setSortDirection Sort direction setter
  * @constructor
  */
 export function SortingMenu({sortMetadata, sortBy, setSortBy, sortDirection, setSortDirection}: SortingMenuProps) {

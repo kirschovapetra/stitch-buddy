@@ -1,4 +1,4 @@
-import { Stack } from "expo-router";
+import {Stack} from "expo-router";
 import {configureFonts, PaperProvider} from "react-native-paper";
 import {useFonts} from "expo-font";
 import {useColorScheme} from "react-native";
@@ -6,8 +6,14 @@ import {useEffect, useState} from "react";
 import {getTheme} from "@/assets/styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ThemeContext } from "@/components/helpers/ThemeContext";
-import {LoadingScreen} from "@/components/ui/LoadingScreen";
+import * as SplashScreen from 'expo-splash-screen';
+
+SplashScreen.preventAutoHideAsync().then(()=>{});
+
 /**
+ * Root layout for the app.
+ * Sets up global providers, navigation,
+ * and shared configuration. Wraps all screens.
  *
  * @constructor
  */
@@ -23,6 +29,10 @@ export default function RootLayout() {
         'Lineseed-Regular': require('@/assets/fonts/LINESeedJP-Regular.ttf'),
     });
 
+    SplashScreen.setOptions({
+        duration: 1000,
+        fade: true,
+    });
 
     useEffect(() => {
         const loadThemeAsync = async () => {
@@ -53,8 +63,16 @@ export default function RootLayout() {
         },
     });
 
-    if (!isLoaded) return (<></>);
-    if (!fontsLoaded) return (<LoadingScreen/>);
+    useEffect(() => {
+        if (isLoaded && fontsLoaded) {
+            SplashScreen.hide();
+        }
+    }, [isLoaded, fontsLoaded]);
+
+    if (!isLoaded || !fontsLoaded) {
+        return null;
+    }
+
     return (
           <ThemeContext.Provider value={{ setTheme }}>
                   <PaperProvider theme={{ ...theme, fonts }}>

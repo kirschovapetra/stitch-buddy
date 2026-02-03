@@ -5,13 +5,14 @@ import {styles} from "@/assets/styles";
 import {BUTTON_MODE, ProjectListItemProps} from "@/assets/types";
 import {useRouter} from "expo-router";
 import {fetchMetadata, renameProject} from "@/scripts/script";
+import * as Haptics from "expo-haptics";
 
 /**
+ * Single project list item with edit and delete actions.
  *
- * @param item
- * @param showDeletionDialog
- * @param metadata
- * @param setMetadata
+ * @param item Project metadata
+ * @param showDeletionDialog Open delete dialog
+ * @param setMetadata Update metadata list
  * @constructor
  */
 export function ProjectsListItem({item, showDeletionDialog, setMetadata}: ProjectListItemProps) {
@@ -22,31 +23,38 @@ export function ProjectsListItem({item, showDeletionDialog, setMetadata}: Projec
     const theme=useTheme()
 
     const dismissEdit= () => {
-        if (editAllowed) {
-            setTempName(item.name);
-            setEditAllowed(!editAllowed);
-        } else {
-            showDeletionDialog(item);
-        }
+        Haptics.selectionAsync().then(() => {
+            if (editAllowed) {
+                setTempName(item.name);
+                setEditAllowed(!editAllowed);
+            } else {
+                showDeletionDialog(item);
+            }
+        })
     }
 
-    const confirmEdit = async () => {
+    const confirmEdit = () => {
+        Haptics.notificationAsync(
+            Haptics.NotificationFeedbackType.Success
+        ).then(async ()=>{
+            if (!editAllowed) setTempName(item.name || "")
+            else if (tempName === item.name) dismissEdit()
+            else {
+                if (tempName.length === 0) return;
+                await renameProject(item.id, tempName)
+                    .then(async ()=>{
+                        await fetchMetadata()
+                            .then((m)=>setMetadata(m))
+                    })
+            }
+            setEditAllowed(!editAllowed);
+        })
 
-        if (!editAllowed) setTempName(item.name || "")
-        else if (tempName === item.name) dismissEdit()
-        else {
-            if (tempName.length === 0) return;
-            await renameProject(item.id, tempName)
-                .then(async ()=>{
-                await fetchMetadata()
-                    .then((m)=>setMetadata(m))
-            })
-        }
-        setEditAllowed(!editAllowed);
     }
     const allowPress = () => {
-        if (!editAllowed)
-            router.navigate(`/${item.id}`)
+        if (!editAllowed) {
+            Haptics.selectionAsync().then(() => router.navigate(`/${item.id}`))
+        }
     }
 
     return (

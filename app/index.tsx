@@ -4,6 +4,9 @@ import {ProjectsList} from "@/components/ui/ProjectsList";
 import {useTheme} from "react-native-paper";
 import {useThemeContext} from "@/components/helpers/ThemeContext";
 /**
+ * Initial screen. Displays a list of projects
+ * and allows navigation to create a new project
+ * or view project details.
  *
  * @constructor
  */

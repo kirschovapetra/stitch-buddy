@@ -6,6 +6,9 @@ import {useTheme} from "react-native-paper";
 import {useThemeContext} from "@/components/helpers/ThemeContext";
 
 /**
+ * Project detail screen.
+ * Displays and manages data for a single project
+ * based on the projectId route param.
  *
  * @constructor
  */

@@ -9,8 +9,9 @@ import {THEME, ThemeProps} from "@/assets/types";
 import {useColorScheme} from "react-native";
 
 /**
+ * Menu for selecting and persisting app theme.
  *
- * @param setTheme
+ * @param setTheme Theme setter
  * @constructor
  */
 export function ThemeMenu({setTheme}:ThemeProps) {
